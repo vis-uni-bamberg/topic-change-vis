@@ -17,12 +17,15 @@
         fill="teal"
         stroke="black"
       />
-      <path
+      <EventSequenceVariableLine
         v-for="variable in variablesToPlot"
         :key="variable"
-        :d="variableLineGenerator(variable)(events)!"
-        :stroke="variableColorScale(variable)"
-        fill="none"
+        :events="events"
+        :x-scale="xScale"
+        :y-scale="yScale(variable)"
+        :variable="variable"
+        :color="variableColorScale(variable)"
+        :glyph-width="glyphWidth"
       />
     </g>
   </svg>
@@ -33,6 +36,7 @@
   import { storeToRefs } from 'pinia'
   import * as d3 from 'd3'
   import { Event } from '@/models/Event'
+  import EventSequenceVariableLine from './EventSequenceVariableLine.vue'
 
   const store = useEventSequenceStore()
   const { events } = storeToRefs(store)
@@ -66,13 +70,6 @@
       .scaleLinear()
       .domain(yExtent(accessor))
       .range([height - margin.bottom, margin.top])
-
-  const variableLineGenerator = (accessor: keyof Event) =>
-    d3
-      .line<Event>()
-      .x((d: Event, i: number) => xScale(i) + glyphWidth / 2)
-      .y((d: Event): number => yScale(accessor)(d[accessor] as number))
-      .curve(d3.curveCatmullRom.alpha(0.5))
 
   const connectionLineGenerator = d3
     .line<Event>()
