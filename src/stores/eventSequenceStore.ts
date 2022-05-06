@@ -27,5 +27,18 @@ export const useEventSequenceStore = defineStore('eventSequenceStore', {
     }
   },
   actions: {},
-  getters: {},
+  getters: {
+    variableExtent: (state) => {
+      return (accessor: keyof Event) => {
+        return [
+          Math.min(
+            ...state.events.map((event: Event) => event[accessor] as number)
+          ),
+          Math.max(
+            ...state.events.map((event: Event) => event[accessor] as number)
+          ),
+        ]
+      }
+    },
+  },
 })

@@ -61,14 +61,10 @@
     .domain([0, events.value.length - 1])
     .range([margin.left, width - margin.right - glyphWidth])
 
-  const yExtent = (accessor: keyof Event) => [
-    Math.min(...events.value.map((event: Event) => event[accessor] as number)),
-    Math.max(...events.value.map((event: Event) => event[accessor] as number)),
-  ]
   const yScale = (accessor: keyof Event) =>
     d3
       .scaleLinear()
-      .domain(yExtent(accessor))
+      .domain(store.variableExtent(accessor))
       .range([height - margin.bottom, margin.top])
 
   const connectionLineGenerator = d3
