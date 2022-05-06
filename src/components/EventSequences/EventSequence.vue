@@ -1,12 +1,12 @@
 <template>
   <svg :viewBox="`0 0 ${width} ${height}`">
+    <path
+      :d="connectionLineGenerator(events)!"
+      stroke="grey"
+      stroke-width="0.25"
+      fill="none"
+    />
     <g>
-      <path
-        :d="connectionLineGenerator(events)!"
-        stroke="grey"
-        stroke-width="0.25"
-        fill="none"
-      />
       <EventGlyph
         v-for="event in events"
         :key="event.id"
@@ -15,6 +15,8 @@
         :size="glyphSize"
         color="teal"
       />
+    </g>
+    <g>
       <EventSequenceVariableLine
         v-for="variable in variablesToPlot"
         :key="variable"
