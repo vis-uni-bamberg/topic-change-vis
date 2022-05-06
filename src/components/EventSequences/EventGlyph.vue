@@ -1,11 +1,11 @@
 <template>
   <rect
     :x="x"
-    :y="store.selected?.id === data.id ? y + 10 : y"
+    :y="selected?.id === data.id ? y + 10 : y"
     :width="size"
     :height="size"
     :fill="color"
-    :stroke-width="store.hovered?.id === data.id ? 2 : 1"
+    :stroke-width="hovered?.id === data.id ? 2 : 1"
     stroke="black"
     @mouseover="hoverEvent(data)"
     @mouseleave="hoverEvent(null)"
@@ -16,8 +16,10 @@
 <script lang="ts" setup>
   import { Event } from '@/models/Event'
   import { useEventStore } from '@/stores/eventStore'
+  import { storeToRefs } from 'pinia'
 
   const store = useEventStore()
+  const { selected, hovered } = storeToRefs(store)
 
   defineProps<{
     data: Event
