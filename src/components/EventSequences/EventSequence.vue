@@ -10,6 +10,7 @@
       <EventGlyph
         v-for="event in events"
         :key="event.id"
+        :data="event"
         :x="xScale(events.indexOf(event))"
         :y="height / 2 - glyphSize / 2"
         :size="glyphSize"
