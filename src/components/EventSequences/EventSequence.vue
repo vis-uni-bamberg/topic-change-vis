@@ -11,8 +11,8 @@
         v-for="event in events"
         :key="event.id"
         :x="xScale(events.indexOf(event))"
-        :y="height / 2 - glyphWidth / 2"
-        :size="glyphWidth"
+        :y="height / 2 - glyphSize / 2"
+        :size="glyphSize"
         color="teal"
       />
       <EventSequenceVariableLine
@@ -23,7 +23,7 @@
         :y-scale="yScale(variable)"
         :variable="variable"
         :color="variableColorScale(variable)"
-        :glyph-width="glyphWidth"
+        :glyph-size="glyphSize"
       />
     </g>
   </svg>
@@ -53,12 +53,12 @@
   }
   const width = 400
   const height = 50
-  const glyphWidth = 10
+  const glyphSize = 10
 
   const xScale = d3
     .scaleLinear()
     .domain([0, events.value.length - 1])
-    .range([margin.left, width - margin.right - glyphWidth])
+    .range([margin.left, width - margin.right - glyphSize])
 
   const yScale = (accessor: keyof Event) =>
     d3
@@ -68,6 +68,6 @@
 
   const connectionLineGenerator = d3
     .line<Event>()
-    .x((d: Event, i: number) => xScale(i) + glyphWidth / 2)
+    .x((d: Event, i: number) => xScale(i) + glyphSize / 2)
     .y(height / 2)
 </script>
