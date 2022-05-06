@@ -7,15 +7,13 @@
         stroke-width="0.25"
         fill="none"
       />
-      <rect
+      <EventGlyph
         v-for="event in events"
         :key="event.id"
         :x="xScale(events.indexOf(event))"
         :y="height / 2 - glyphWidth / 2"
-        :width="glyphWidth"
-        :height="glyphWidth"
-        fill="teal"
-        stroke="black"
+        :size="glyphWidth"
+        color="teal"
       />
       <EventSequenceVariableLine
         v-for="variable in variablesToPlot"
@@ -37,6 +35,7 @@
   import * as d3 from 'd3'
   import { Event } from '@/models/Event'
   import EventSequenceVariableLine from './EventSequenceVariableLine.vue'
+  import EventGlyph from './EventGlyph.vue'
 
   const store = useEventSequenceStore()
   const { events } = storeToRefs(store)
