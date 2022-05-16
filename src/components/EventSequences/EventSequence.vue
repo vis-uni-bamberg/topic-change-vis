@@ -7,17 +7,6 @@
       fill="none"
     />
     <g>
-      <EventGlyph
-        v-for="event in events"
-        :key="event.id"
-        :data="event"
-        :x="xScale(events.indexOf(event))"
-        :y="height / 2 - glyphSize / 2"
-        :size="glyphSize"
-        color="teal"
-      />
-    </g>
-    <g>
       <EventSequenceVariableLine
         v-for="variable in variablesToPlot"
         :key="variable"
@@ -27,6 +16,17 @@
         :variable="variable"
         :color="variableColorScale(variable)"
         :glyph-size="glyphSize"
+      />
+    </g>
+    <g>
+      <EventGlyph
+        v-for="event in events"
+        :key="event.id"
+        :data="event"
+        :x="xScale(events.indexOf(event))"
+        :y="height / 2 - glyphSize / 2"
+        :size="glyphSize"
+        color="teal"
       />
     </g>
   </svg>
