@@ -40,8 +40,8 @@
   import EventSequenceVariableLine from './EventSequenceVariableLine.vue'
   import EventGlyph from './EventGlyph.vue'
 
-  const store = useEventSequenceStore()
-  const { events } = storeToRefs(store)
+  const eventSequenceStore = useEventSequenceStore()
+  const { events } = storeToRefs(eventSequenceStore)
 
   const variablesToPlot = ['score' as keyof Event, 'value' as keyof Event]
   const variableColorScale = d3
@@ -66,7 +66,7 @@
   const yScale = (accessor: keyof Event) =>
     d3
       .scaleLinear()
-      .domain(store.variableExtent(accessor))
+      .domain(eventSequenceStore.variableExtent(accessor))
       .range([height - margin.bottom, margin.top])
 
   const connectionLineGenerator = d3

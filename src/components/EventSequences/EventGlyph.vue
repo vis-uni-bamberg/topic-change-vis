@@ -18,8 +18,8 @@
   import { useEventStore } from '@/stores/eventStore'
   import { storeToRefs } from 'pinia'
 
-  const store = useEventStore()
-  const { selected, hovered } = storeToRefs(store)
+  const eventStore = useEventStore()
+  const { selected, hovered } = storeToRefs(eventStore)
 
   defineProps<{
     data: Event
@@ -30,9 +30,9 @@
   }>()
 
   const hoverEvent = (event: Event | null) => {
-    store.setHovered(event)
+    eventStore.setHovered(event)
   }
   const selectEvent = (event: Event) => {
-    store.setSelected(event)
+    eventStore.setSelected(event)
   }
 </script>
