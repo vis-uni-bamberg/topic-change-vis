@@ -39,6 +39,7 @@
   import { Event } from '@/models/Event'
   import EventSequenceVariableLine from './EventSequenceVariableLine.vue'
   import EventGlyph from './EventGlyph.vue'
+  import { config } from '@/config'
 
   const eventSequenceStore = useEventSequenceStore()
   const { events } = storeToRefs(eventSequenceStore)
@@ -56,7 +57,7 @@
   }
   const width = 400
   const height = 50
-  const glyphSize = 10
+  const glyphSize = config.eventGlyphSize
 
   const xScale = d3
     .scaleLinear()
