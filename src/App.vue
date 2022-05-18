@@ -6,8 +6,27 @@
 </script>
 
 <template>
-  <EventSequence />
-  <WordCloud />
+  <BContainer>
+    <BRow>
+      <BCol>
+        <BCard>
+          <BListGroup>
+            <BListGroupItem
+              v-for="number in Array.from(Array(10).keys())"
+              :key="number"
+            >
+              <EventSequence />
+            </BListGroupItem>
+          </BListGroup>
+        </BCard>
+      </BCol>
+      <BCol>
+        <BCard>
+          <WordCloud />
+        </BCard>
+      </BCol>
+    </BRow>
+  </BContainer>
 </template>
 
 <style>
