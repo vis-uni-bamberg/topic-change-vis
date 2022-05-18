@@ -1,33 +1,39 @@
 <template>
-  <svg :viewBox="`0 0 ${width} ${height}`">
-    <path
-      :d="connectionLineGenerator(events)!"
-      stroke="grey"
-      stroke-width="0.25"
-      fill="none"
-    />
-    <g>
-      <EventSequenceVariableLine
-        v-for="variable in variablesToPlot"
-        :key="variable"
-        :events="events"
-        :x-scale="xScale"
-        :y-scale="yScale(variable)"
-        :variable="variable"
-        :color="variableColorScale(variable)"
-        :glyph-size="glyphSize"
+  <svg
+    :viewBox="`0 0 ${width + margin.left + margin.right} ${
+      height + margin.top + margin.bottom
+    }`"
+  >
+    <g :transform="`translate(${[margin.left, margin.top]})`">
+      <path
+        :d="connectionLineGenerator(events)!"
+        stroke="grey"
+        stroke-width="0.25"
+        fill="none"
       />
-    </g>
-    <g>
-      <EventGlyph
-        v-for="event in events"
-        :key="event.id"
-        :data="event"
-        :x="xScale(events.indexOf(event))"
-        :y="height / 2 - glyphSize / 2"
-        :size="glyphSize"
-        color="teal"
-      />
+      <g>
+        <EventSequenceVariableLine
+          v-for="variable in variablesToPlot"
+          :key="variable"
+          :events="events"
+          :x-scale="xScale"
+          :y-scale="yScale(variable)"
+          :variable="variable"
+          :color="variableColorScale(variable)"
+          :glyph-size="glyphSize"
+        />
+      </g>
+      <g>
+        <EventGlyph
+          v-for="event in events"
+          :key="event.id"
+          :data="event"
+          :x="xScale(events.indexOf(event))"
+          :y="height / 2 - glyphSize / 2"
+          :size="glyphSize"
+          color="teal"
+        />
+      </g>
     </g>
   </svg>
 </template>
@@ -62,13 +68,13 @@
   const xScale = d3
     .scaleLinear()
     .domain([0, events.value.length - 1])
-    .range([margin.left, width - margin.right - glyphSize])
+    .range([0, width - glyphSize])
 
   const yScale = (accessor: keyof Event) =>
     d3
       .scaleLinear()
       .domain(eventSequenceStore.variableExtent(accessor))
-      .range([height - margin.bottom, margin.top])
+      .range([height, 0])
 
   const connectionLineGenerator = d3
     .line<Event>()
