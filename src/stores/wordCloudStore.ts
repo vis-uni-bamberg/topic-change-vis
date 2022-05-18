@@ -14,7 +14,7 @@ export const useWordCloudStore = defineStore('wordCloudStore', {
         'than',
         'this',
       ].map(function (d) {
-        return { text: d, size: 10 + Math.random() * 90 }
+        return { text: d, size: 10 + Math.random() * 40 }
       }),
     }
   },
