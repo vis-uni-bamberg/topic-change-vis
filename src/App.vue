@@ -2,10 +2,12 @@
   // This starter template is using Vue 3 <script setup> SFCs
   // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
   import EventSequence from './components/EventSequences/EventSequence.vue'
+  import WordCloud from './components/WordCloud/WordCloud.vue'
 </script>
 
 <template>
   <EventSequence />
+  <WordCloud />
 </template>
 
 <style>
