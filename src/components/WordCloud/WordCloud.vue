@@ -14,13 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { useWordCloudStore } from '@/stores/wordCloudStore'
+  import { useGlobalWordStore } from '@/stores/globalWordStore'
   import cloud from 'd3-cloud'
   import { storeToRefs } from 'pinia'
   import WordElement from './WordElement.vue'
 
-  const wordCloudStore = useWordCloudStore()
-  const { words } = storeToRefs(wordCloudStore)
+  const globalWordStore = useGlobalWordStore()
+  const { words } = storeToRefs(globalWordStore)
 
   const margin = {
     top: 5,

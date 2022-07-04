@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useWordCloudStore = defineStore('wordCloudStore', {
+export const useGlobalWordStore = defineStore('globalWordStore', {
   state: () => {
     return {
       words: [
