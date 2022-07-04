@@ -16,8 +16,8 @@
             <rect
               v-for="(period, index) in innerTopic.periods"
               :key="period.start"
-              :x="index * squareSize"
-              :width="squareSize"
+              :x="index * periodWidth"
+              :width="periodWidth"
               :height="height"
               :fill="
                 similarityScale(
@@ -42,7 +42,7 @@
 
   const width = 300 / datasetStore.periodCount
   const height = 10
-  const squareSize = width / datasetStore.periodCount
+  const periodWidth = width / datasetStore.periodCount
 
   const similarityScale = d3.interpolateGreys
 </script>
