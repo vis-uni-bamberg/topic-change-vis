@@ -19,7 +19,10 @@
           <BListGroup>
             <BListGroupItem v-for="topic in topics" :key="topic.id">
               {{ topic.id }}
-              <EventSequence :topic="topic" />
+              <EventSequence
+                :topic="topic"
+                :color="datasetStore.colorScale(topic.id)"
+              />
             </BListGroupItem>
           </BListGroup>
         </BCard>

@@ -1,4 +1,5 @@
 import { Topic } from '@/models/Topic'
+import * as d3 from 'd3'
 import { defineStore } from 'pinia'
 
 export const useDatasetStore = defineStore('datasetStore', {
@@ -100,11 +101,14 @@ export const useDatasetStore = defineStore('datasetStore', {
   },
   actions: {},
   getters: {
-    timerange: (state) => {
-      return [state.topics[0].periods[0].start, state.topics[0].periods[-1].end]
-    },
-    periodCount: (state) => {
-      return state.topics[0].periods.length
-    },
+    timerange: (state) => [
+      state.topics[0].periods[0].start,
+      state.topics[0].periods[-1].end,
+    ],
+    periodCount: (state) => state.topics[0].periods.length,
+    colorScale: (state) =>
+      d3
+        .scaleOrdinal(d3.schemeCategory10)
+        .domain(state.topics.map((topic) => topic.id)),
   },
 })

@@ -14,7 +14,7 @@
           :x-scale="xScale"
           :y-scale="yScale"
           :variable="variable"
-          :color="variableColorScale(variable)"
+          :color="color"
           :glyph-size="glyphSize"
         />
       </g>
@@ -28,7 +28,7 @@
           :x="xScale(topic.periods.indexOf(period))"
           :y="height / 2 - glyphSize / 2"
           :size="glyphSize"
-          color="teal"
+          :color="color"
         />
       </g>
     </g>
@@ -46,6 +46,7 @@
 
   const props = defineProps<{
     topic: Topic
+    color: string
   }>()
 
   const { topic } = toRefs(props)
@@ -54,9 +55,6 @@
     'similarity' as keyof TopicPeriod,
     'threshold' as keyof TopicPeriod,
   ]
-  const variableColorScale = d3
-    .scaleOrdinal(d3.schemeCategory10)
-    .domain(variablesToPlot)
 
   const margin = {
     top: 5,
