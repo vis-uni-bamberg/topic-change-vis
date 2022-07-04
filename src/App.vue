@@ -3,6 +3,7 @@
   // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
   import EventSequence from './components/EventSequences/EventSequence.vue'
   import WordCloud from './components/WordCloud/WordCloud.vue'
+  import SimilarityMatrix from './components/SimilarityMatrix/SimilarityMatrix.vue'
 </script>
 
 <template>
@@ -21,9 +22,16 @@
         </BCard>
       </BCol>
       <BCol>
-        <BCard>
-          <WordCloud />
-        </BCard>
+        <BRow>
+          <BCard>
+            <WordCloud />
+          </BCard>
+        </BRow>
+        <BRow>
+          <BCard>
+            <SimilarityMatrix />
+          </BCard>
+        </BRow>
       </BCol>
     </BRow>
   </BContainer>
