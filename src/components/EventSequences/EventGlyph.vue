@@ -1,6 +1,6 @@
 <template>
   <rect
-    :x="x"
+    :x="x - size / 2"
     :y="selected?.id === data.id ? y + 10 : y"
     :width="size"
     :height="size"
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Event } from '@/models/Event'
+  import { TopicPeriod } from '@/models/TopicPeriod'
   import { useEventStore } from '@/stores/eventStore'
   import { storeToRefs } from 'pinia'
 
@@ -22,17 +22,17 @@
   const { selected, hovered } = storeToRefs(eventStore)
 
   defineProps<{
-    data: Event
+    data: TopicPeriod
     x: number
     y: number
     size: number
     color: string
   }>()
 
-  const hoverEvent = (event: Event | null) => {
+  const hoverEvent = (event: TopicPeriod | null) => {
     eventStore.setHovered(event)
   }
-  const selectEvent = (event: Event) => {
+  const selectEvent = (event: TopicPeriod) => {
     eventStore.setSelected(event)
   }
 </script>

@@ -8,21 +8,21 @@
 
 <script setup lang="ts">
   import * as d3 from 'd3'
-  import { Event } from '@/models/Event'
+  import { TopicPeriod } from '@/models/TopicPeriod'
 
   const props = defineProps<{
-    events: Event[]
+    events: TopicPeriod[]
     xScale: d3.ScaleLinear<number, number>
     yScale: d3.ScaleLinear<number, number>
     color: string
-    variable: keyof Event
+    variable: keyof TopicPeriod
     glyphSize: number
   }>()
 
-  const variableLineGenerator = (accessor: keyof Event) =>
+  const variableLineGenerator = (accessor: keyof TopicPeriod) =>
     d3
-      .line<Event>()
-      .x((d: Event, i: number) => props.xScale(i) + props.glyphSize / 2)
-      .y((d: Event): number => props.yScale(d[accessor] as number))
+      .line<TopicPeriod>()
+      .x((d: TopicPeriod, i: number) => props.xScale(i))
+      .y((d: TopicPeriod): number => props.yScale(d[accessor] as number))
       .curve(d3.curveCatmullRom.alpha(0.5))
 </script>

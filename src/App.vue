@@ -4,6 +4,11 @@
   import EventSequence from './components/EventSequences/EventSequence.vue'
   import WordCloud from './components/WordCloud/WordCloud.vue'
   import SimilarityMatrix from './components/SimilarityMatrix/SimilarityMatrix.vue'
+  import { useDatasetStore } from './stores/datasetStore'
+  import { storeToRefs } from 'pinia'
+
+  const datasetStore = useDatasetStore()
+  const { topics } = storeToRefs(datasetStore)
 </script>
 
 <template>
@@ -12,11 +17,9 @@
       <BCol>
         <BCard>
           <BListGroup>
-            <BListGroupItem
-              v-for="number in Array.from(Array(10).keys())"
-              :key="number"
-            >
-              <EventSequence />
+            <BListGroupItem v-for="topic in topics" :key="topic.id">
+              {{ topic.id }}
+              <EventSequence :topic="topic" />
             </BListGroupItem>
           </BListGroup>
         </BCard>

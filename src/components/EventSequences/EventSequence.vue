@@ -5,19 +5,14 @@
     }`"
   >
     <g :transform="`translate(${[margin.left, margin.top]})`">
-      <path
-        :d="connectionLineGenerator(events)!"
-        stroke="grey"
-        stroke-width="0.25"
-        fill="none"
-      />
+      <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
       <g>
         <EventSequenceVariableLine
           v-for="variable in variablesToPlot"
           :key="variable"
-          :events="events"
+          :events="topic.periods"
           :x-scale="xScale"
-          :y-scale="yScale(variable)"
+          :y-scale="yScale"
           :variable="variable"
           :color="variableColorScale(variable)"
           :glyph-size="glyphSize"
@@ -25,10 +20,12 @@
       </g>
       <g>
         <EventGlyph
-          v-for="event in events"
-          :key="event.id"
-          :data="event"
-          :x="xScale(events.indexOf(event))"
+          v-for="period in topic.periods.filter(
+            (period) => period.similarity <= period.threshold
+          )"
+          :key="period.id"
+          :data="period"
+          :x="xScale(topic.periods.indexOf(period))"
           :y="height / 2 - glyphSize / 2"
           :size="glyphSize"
           color="teal"
@@ -39,18 +36,24 @@
 </template>
 
 <script setup lang="ts">
-  import { useEventSequenceStore } from '@/stores/eventSequenceStore'
-  import { storeToRefs } from 'pinia'
   import * as d3 from 'd3'
-  import { Event } from '@/models/Event'
   import EventSequenceVariableLine from './EventSequenceVariableLine.vue'
   import EventGlyph from './EventGlyph.vue'
   import { config } from '@/config'
+  import { Topic } from '@/models/Topic'
+  import { toRefs } from 'vue'
+  import { TopicPeriod } from '@/models/TopicPeriod'
 
-  const eventSequenceStore = useEventSequenceStore()
-  const { events } = storeToRefs(eventSequenceStore)
+  const props = defineProps<{
+    topic: Topic
+  }>()
 
-  const variablesToPlot = ['score' as keyof Event, 'value' as keyof Event]
+  const { topic } = toRefs(props)
+
+  const variablesToPlot = [
+    'similarity' as keyof TopicPeriod,
+    'threshold' as keyof TopicPeriod,
+  ]
   const variableColorScale = d3
     .scaleOrdinal(d3.schemeCategory10)
     .domain(variablesToPlot)
@@ -67,17 +70,13 @@
 
   const xScale = d3
     .scaleLinear()
-    .domain([0, events.value.length - 1])
-    .range([0, width - glyphSize])
+    .domain([0, topic.value.periods.length - 1])
+    .range([margin.left, width - margin.right])
 
-  const yScale = (accessor: keyof Event) =>
-    d3
-      .scaleLinear()
-      .domain(eventSequenceStore.variableExtent(accessor))
-      .range([height, 0])
+  const yScale = d3.scaleLinear().domain([0, 1]).range([height, 0])
 
-  const connectionLineGenerator = d3
-    .line<Event>()
-    .x((d: Event, i: number) => xScale(i) + glyphSize / 2)
-    .y(height / 2)
+  const connectionLine = d3.line()([
+    [margin.left, height / 2],
+    [width - margin.right, height / 2],
+  ])
 </script>
