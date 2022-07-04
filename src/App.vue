@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <BContainer fluid>
+  <BContainer>
     <BRow>
       <BCol>
         <BCard>
