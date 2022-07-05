@@ -1,23 +1,23 @@
 import { defineStore } from 'pinia'
+import _ from 'lodash'
 
 export const useGlobalWordStore = defineStore('globalWordStore', {
   state: () => {
     return {
-      words: [
-        'Hello',
-        'world',
-        'normally',
-        'you',
-        'want',
-        'more',
-        'words',
-        'than',
-        'this',
-      ].map(function (d) {
-        return { text: d, size: 10 + Math.random() * 40 }
-      }),
+      words: [] as { text: string; size: number }[],
     }
   },
-  actions: {},
+  actions: {
+    loadData(payload: string[][][]): void {
+      const flattened = payload.flat().flat()
+
+      const wordToCountMapping = _.countBy(flattened)
+
+      this.words = Object.entries(wordToCountMapping).map((entry) => ({
+        text: entry[0],
+        size: entry[1] * 5,
+      }))
+    },
+  },
   getters: {},
 })

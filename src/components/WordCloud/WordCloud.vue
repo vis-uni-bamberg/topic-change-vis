@@ -14,12 +14,19 @@
 </template>
 
 <script lang="ts" setup>
+  import { useDatasetStore } from '@/stores/datasetStore'
   import { useGlobalWordStore } from '@/stores/globalWordStore'
   import cloud from 'd3-cloud'
   import { storeToRefs } from 'pinia'
   import WordElement from './WordElement.vue'
 
+  const datasetStore = useDatasetStore()
+  const { topics } = storeToRefs(datasetStore)
+
   const globalWordStore = useGlobalWordStore()
+  globalWordStore.loadData(
+    topics.value.map((topic) => topic.periods.map((period) => period.words))
+  )
   const { words } = storeToRefs(globalWordStore)
 
   const margin = {
