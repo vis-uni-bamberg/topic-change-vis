@@ -21,7 +21,9 @@
               :height="height"
               :fill="
                 similarityScale(
-                  period.similarity - outerTopic.periods[index].threshold
+                  Math.abs(
+                    period.similarity - outerTopic.periods[index].threshold
+                  )
                 )
               "
             />
