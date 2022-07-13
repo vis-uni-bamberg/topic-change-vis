@@ -5,38 +5,31 @@
   import WordCloud from './components/WordCloud/WordCloud.vue'
   import SimilarityMatrix from './components/SimilarityMatrix/SimilarityMatrix.vue'
   import { useDatasetStore } from './stores/datasetStore'
-  import { storeToRefs } from 'pinia'
 
   const datasetStore = useDatasetStore()
-  const { topics } = storeToRefs(datasetStore)
+  datasetStore.loadData()
 </script>
 
 <template>
   <BContainer>
     <BRow>
       <BCol>
-        <BCard>
-          <BListGroup>
-            <BListGroupItem v-for="topic in topics" :key="topic.id">
-              {{ topic.id }}
-              <EventSequence
-                :topic="topic"
-                :color="datasetStore.colorScale(topic.id)"
-              />
-            </BListGroupItem>
-          </BListGroup>
-        </BCard>
+        <BListGroup>
+          <BListGroupItem v-for="topic in datasetStore.topics" :key="topic.id">
+            {{ topic.id }}
+            <EventSequence
+              :topic="topic"
+              :color="datasetStore.colorScale(topic.id)"
+            />
+          </BListGroupItem>
+        </BListGroup>
       </BCol>
       <BCol>
         <BRow>
-          <BCard>
-            <WordCloud />
-          </BCard>
+          <WordCloud />
         </BRow>
         <BRow>
-          <BCard>
-            <SimilarityMatrix />
-          </BCard>
+          <SimilarityMatrix />
         </BRow>
       </BCol>
     </BRow>

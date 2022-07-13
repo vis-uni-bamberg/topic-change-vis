@@ -5,101 +5,36 @@ import { defineStore } from 'pinia'
 export const useDatasetStore = defineStore('datasetStore', {
   state: () => {
     return {
-      topics: [
-        {
-          id: '1',
-          periods: [
-            {
-              id: '11',
-              start: '1',
-              end: '2',
-              similarity: 0.7,
-              threshold: 0.35,
-              words: ['This', 'is', 'a', 'test'],
-            },
-            {
-              id: '12',
-              start: '2',
-              end: '3',
-              similarity: 0.7,
-              threshold: 0.45,
-              words: ['And', 'another', 'test'],
-            },
-            {
-              id: '12',
-              start: '2',
-              end: '3',
-              similarity: 0.7,
-              threshold: 0.55,
-              words: ['Yet', 'another', 'test'],
-            },
-          ],
-          events: [],
-        },
-        {
-          id: '2',
-          periods: [
-            {
-              id: '21',
-              start: '1',
-              end: '2',
-              similarity: 0.65,
-              threshold: 0.6,
-              words: ['This', 'is', 'a', 'test'],
-            },
-            {
-              id: '22',
-              start: '2',
-              end: '3',
-              similarity: 0.65,
-              threshold: 0.65,
-              words: ['This', 'is', 'a', 'test'],
-            },
-            {
-              id: '23',
-              start: '4',
-              end: '4',
-              similarity: 0.65,
-              threshold: 0.65,
-              words: ['This', 'is', 'a', 'test'],
-            },
-          ],
-          events: [],
-        },
-        {
-          id: '3',
-          periods: [
-            {
-              id: '31',
-              start: '1',
-              end: '2',
-              similarity: 0.7,
-              threshold: 0.7,
-              words: ['This', 'is', 'a', 'test'],
-            },
-            {
-              id: '32',
-              start: '2',
-              end: '3',
-              similarity: 0.75,
-              threshold: 0.7,
-              words: ['This', 'is', 'a', 'test'],
-            },
-            {
-              id: '32',
-              start: '2',
-              end: '3',
-              similarity: 0.8,
-              threshold: 0.75,
-              words: ['This', 'is', 'a', 'test'],
-            },
-          ],
-          events: [],
-        },
-      ] as Topic[],
+      topics: [] as Topic[],
     }
   },
-  actions: {},
+  actions: {
+    async loadData(): Promise<void> {
+      const simData = await d3.csv('./data/sim.csv')
+      const thresholdData = await d3.csv('./data/quantiles.csv')
+      const topicNames = Object.keys(simData[0]).filter(
+        (topicName) => topicName.length > 0
+      )
+
+      this.topics = topicNames.map((topicName) => ({
+        id: topicName,
+        periods: [],
+      }))
+
+      this.topics.forEach((topic) => {
+        simData.slice(1).forEach((row, index) => {
+          const similarity = row[topic.id] ?? 0
+          const threshold = thresholdData.slice(1)[index][topic.id] ?? 0
+          topic.periods.push({
+            id: `${topic.id}-${index}`,
+            similarity: +similarity,
+            threshold: +threshold,
+            words: [],
+          })
+        })
+      })
+    },
+  },
   getters: {
     timerange: (state) => [
       state.topics[0].periods[0].start,
