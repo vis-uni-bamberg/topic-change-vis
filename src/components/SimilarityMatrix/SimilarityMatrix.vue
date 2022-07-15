@@ -19,13 +19,7 @@
               :x="index * periodWidth"
               :width="periodWidth"
               :height="height"
-              :fill="
-                similarityScale(
-                  Math.abs(
-                    period.similarity - outerTopic.periods[index].threshold
-                  )
-                )
-              "
+              :fill="getFill(outerTopic, innerTopic, period, index)"
             />
           </svg>
         </div>
@@ -35,6 +29,8 @@
 </template>
 
 <script lang="ts" setup>
+  import { Topic } from '@/models/Topic'
+  import { TopicPeriod } from '@/models/TopicPeriod'
   import { useDatasetStore } from '@/stores/datasetStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
@@ -47,4 +43,18 @@
   const periodWidth = width / datasetStore.periodCount
 
   const similarityScale = d3.interpolateGreys
+
+  function getFill(
+    outerTopic: Topic,
+    innerTopic: Topic,
+    period: TopicPeriod,
+    index: number
+  ) {
+    if (outerTopic.id === innerTopic.id) {
+      return datasetStore.colorScale(outerTopic.id)
+    }
+    return similarityScale(
+      Math.abs(period.similarity - outerTopic.periods[index].threshold)
+    )
+  }
 </script>
