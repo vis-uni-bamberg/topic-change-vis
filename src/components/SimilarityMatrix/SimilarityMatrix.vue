@@ -29,7 +29,7 @@
               :fill="
                 similarityScale(
                   Math.abs(
-                    period.similarity - outerTopic.periods[index].threshold
+                    period.similarity - outerTopic.periods[index]?.threshold
                   )
                 )
               "
