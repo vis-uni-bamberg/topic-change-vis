@@ -8,13 +8,19 @@
       <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
       <g>
         <EventSequenceVariableLine
-          v-for="variable in variablesToPlot"
-          :key="variable"
           :events="topic.periods"
           :x-scale="xScale"
           :y-scale="yScale"
-          :variable="variable"
+          variable="similarity"
           :color="color"
+          :glyph-size="glyphSize"
+        />
+        <EventSequenceVariableLine
+          :events="topic.periods"
+          :x-scale="xScale"
+          :y-scale="yScale"
+          variable="threshold"
+          color="black"
           :glyph-size="glyphSize"
         />
       </g>
@@ -42,19 +48,20 @@
   import { config } from '@/config'
   import { Topic } from '@/models/Topic'
   import { toRefs } from 'vue'
-  import { TopicPeriod } from '@/models/TopicPeriod'
 
   const props = defineProps<{
     topic: Topic
     color: string
   }>()
 
-  const { topic } = toRefs(props)
+  const { topic, color } = toRefs(props)
 
-  const variablesToPlot = [
-    'similarity' as keyof TopicPeriod,
-    'threshold' as keyof TopicPeriod,
-  ]
+  const thresholdColor = d3.hsl(color.value.slice())
+  console.log(thresholdColor.formatHex())
+  thresholdColor.brighter()
+
+  console.log(color.value)
+  console.log(thresholdColor.brighter().formatHex())
 
   const margin = {
     top: 5,
