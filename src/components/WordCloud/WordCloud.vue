@@ -1,32 +1,34 @@
 <template>
-  <svg class="word-cloud" :viewBox="`0 0 ${width} ${height}`">
-    <g :transform="`translate(${width / 2}, ${height / 2})`">
+  <svg
+    class="word-cloud"
+    :viewBox="`0 0 ${wordCloud.size()[0]} ${wordCloud.size()[1]}`"
+  >
+    <g
+      :transform="`translate(${wordCloud.size()[0] / 2}, ${
+        wordCloud.size()[1] / 2
+      })`"
+    >
       <WordElement
         v-for="word in wordCloud.words()"
-        :key="word.text"
+        :key="word.word"
         :x="word.x"
         :y="word.y"
         :size="word.size"
-        :text="word.text"
+        :text="word.word"
       />
     </g>
   </svg>
 </template>
 
 <script lang="ts" setup>
-  import { useDatasetStore } from '@/stores/datasetStore'
   import { useGlobalWordStore } from '@/stores/globalWordStore'
+  import * as d3 from 'd3'
   import cloud from 'd3-cloud'
   import { storeToRefs } from 'pinia'
   import WordElement from './WordElement.vue'
-
-  const datasetStore = useDatasetStore()
-  const { topics } = storeToRefs(datasetStore)
+  import { MyWord } from '@/models/Word'
 
   const globalWordStore = useGlobalWordStore()
-  globalWordStore.loadData(
-    topics.value.map((topic) => topic.periods.map((period) => period.words))
-  )
   const { words } = storeToRefs(globalWordStore)
 
   const margin = {
@@ -36,17 +38,24 @@
     left: 5,
   }
   const width = 400
-  const height = 400
+  const height = 1050
 
-  const wordCloud = cloud()
+  const wordSizeScale = d3
+    .scaleLinear()
+    .domain([0, Math.max(...words.value.map((word) => word.count))])
+    .range([0, 80])
+
+  const wordCloud = cloud<MyWord>()
     .size([
       width - margin.left - margin.right,
       height - margin.top - margin.bottom,
     ])
-    .words(words.value)
-    .padding(5)
+    .words(words.value as MyWord[])
+    .text((d) => d.word)
+    .padding(1)
     .rotate(() => 0)
-    .fontSize((d) => d.size ?? 10)
+    .spiral('rectangular')
+    .fontSize((d) => wordSizeScale(+d.count))
 
   wordCloud.start()
 </script>

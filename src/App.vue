@@ -5,8 +5,10 @@
   import WordCloud from './components/WordCloud/WordCloud.vue'
   import SimilarityMatrix from './components/SimilarityMatrix/SimilarityMatrix.vue'
   import { useDatasetStore } from './stores/datasetStore'
+  import { useGlobalWordStore } from './stores/globalWordStore'
 
   const datasetStore = useDatasetStore()
+  const wordCloudStore = useGlobalWordStore()
   datasetStore.loadData()
 </script>
 
@@ -25,7 +27,7 @@
         </BListGroup>
       </BCol>
       <BCol>
-        <BRow>
+        <BRow v-if="wordCloudStore.words.length > 0">
           <WordCloud />
         </BRow>
         <BRow>

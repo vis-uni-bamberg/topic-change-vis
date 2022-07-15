@@ -1,6 +1,7 @@
 import { Topic } from '@/models/Topic'
 import * as d3 from 'd3'
 import { defineStore } from 'pinia'
+import { useGlobalWordStore } from './globalWordStore'
 
 export const useDatasetStore = defineStore('datasetStore', {
   state: () => {
@@ -12,6 +13,16 @@ export const useDatasetStore = defineStore('datasetStore', {
     async loadData(): Promise<void> {
       const simData = await d3.csv('./data/sim.csv')
       const thresholdData = await d3.csv('./data/quantiles.csv')
+      const periods: any[] = []
+      await Promise.all([
+        d3.csv('./data/period0.csv'),
+        d3.csv('./data/period1.csv'),
+      ]).then((files) => {
+        files.forEach((file) => {
+          periods.push(file)
+        })
+      })
+
       const topicNames = Object.keys(simData[0]).filter(
         (topicName) => topicName.length > 0
       )
@@ -21,18 +32,36 @@ export const useDatasetStore = defineStore('datasetStore', {
         periods: [],
       }))
 
-      this.topics.forEach((topic) => {
-        simData.slice(1).forEach((row, index) => {
-          const similarity = row[topic.id] ?? 0
-          const threshold = thresholdData.slice(1)[index][topic.id] ?? 0
+      this.topics.forEach((topic, topicIndex) => {
+        simData.slice(1, 3).forEach((period, periodIndex) => {
+          const similarity = period[topic.id] ?? 0
+          const threshold = thresholdData.slice(1)[periodIndex][topic.id] ?? 0
+
+          const words = Object.entries(
+            periods[periodIndex]?.find(
+              (period: { [x: string]: number }) => period[''] == topicIndex + 1
+            )
+          )
+            .slice(1)
+            .map((word) => ({
+              word: word[0],
+              count: word[1] as number,
+            }))
+            .filter((word) => word.count > 100)
+
           topic.periods.push({
-            id: `${topic.id}-${index}`,
+            id: `${topic.id}-${periodIndex}`,
             similarity: +similarity,
             threshold: +threshold,
-            words: [],
+            words: words,
           })
         })
       })
+
+      const globalWordStore = useGlobalWordStore()
+      globalWordStore.loadData(
+        this.topics.map((topic) => topic.periods.map((period) => period.words))
+      )
     },
   },
   getters: {
