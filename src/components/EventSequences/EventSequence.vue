@@ -54,14 +54,7 @@
     color: string
   }>()
 
-  const { topic, color } = toRefs(props)
-
-  const thresholdColor = d3.hsl(color.value.slice())
-  console.log(thresholdColor.formatHex())
-  thresholdColor.brighter()
-
-  console.log(color.value)
-  console.log(thresholdColor.brighter().formatHex())
+  const { topic } = toRefs(props)
 
   const margin = {
     top: 5,
