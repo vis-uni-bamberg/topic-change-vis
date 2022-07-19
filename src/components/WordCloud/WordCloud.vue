@@ -29,7 +29,7 @@
   import { MyWord } from '@/models/Word'
 
   const globalWordStore = useGlobalWordStore()
-  const { words } = storeToRefs(globalWordStore)
+  const { aggregatedWords } = storeToRefs(globalWordStore)
 
   const margin = {
     top: 5,
@@ -42,7 +42,7 @@
 
   const wordSizeScale = d3
     .scaleLinear()
-    .domain([0, Math.max(...words.value.map((word) => word.count))])
+    .domain([0, Math.max(...aggregatedWords.value.map((word) => word.count))])
     .range([0, 80])
 
   const wordCloud = cloud<MyWord>()
@@ -50,7 +50,7 @@
       width - margin.left - margin.right,
       height - margin.top - margin.bottom,
     ])
-    .words(words.value as MyWord[])
+    .words(aggregatedWords.value as MyWord[])
     .text((d) => d.word)
     .padding(1)
     .rotate(() => 0)

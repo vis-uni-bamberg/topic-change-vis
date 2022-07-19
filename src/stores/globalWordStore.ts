@@ -4,15 +4,17 @@ import { MyWord } from '@/models/Word'
 export const useGlobalWordStore = defineStore('globalWordStore', {
   state: () => {
     return {
-      words: [] as MyWord[],
+      words: [] as MyWord[][][],
     }
   },
   actions: {
     loadData(payload: MyWord[][][]): void {
-      const flattened = payload.flat().flat()
-
-      this.words = flattened
+      this.words = payload
     },
   },
-  getters: {},
+  getters: {
+    aggregatedWords: (state) => {
+      return state.words.flat().flat()
+    },
+  },
 })

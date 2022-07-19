@@ -60,7 +60,7 @@
       return datasetStore.colorScale(outerTopic.id)
     }
     return similarityScale(
-      Math.abs(period.similarity - outerTopic.periods[index].threshold)
+      Math.abs(period.similarity - outerTopic.periods[index]?.threshold)
     )
   }
 </script>

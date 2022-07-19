@@ -33,21 +33,24 @@ export const useDatasetStore = defineStore('datasetStore', {
       }))
 
       this.topics.forEach((topic, topicIndex) => {
-        simData.slice(1, 3).forEach((period, periodIndex) => {
+        simData.slice(1).forEach((period, periodIndex) => {
           const similarity = period[topic.id] ?? 0
           const threshold = thresholdData.slice(1)[periodIndex][topic.id] ?? 0
 
-          const words = Object.entries(
-            periods[periodIndex]?.find(
-              (period: { [x: string]: number }) => period[''] == topicIndex + 1
-            )
-          )
-            .slice(1)
-            .map((word) => ({
-              word: word[0],
-              count: word[1] as number,
-            }))
-            .filter((word) => word.count > 100)
+          const words = periods[periodIndex]
+            ? Object.entries(
+                periods[periodIndex]?.find(
+                  (period: { [x: string]: number }) =>
+                    period[''] == topicIndex + 1
+                )
+              )
+                .slice(1)
+                .map((word) => ({
+                  word: word[0],
+                  count: word[1] as number,
+                }))
+                .filter((word) => word.count > 100)
+            : []
 
           topic.periods.push({
             id: `${topic.id}-${periodIndex}`,
