@@ -14,28 +14,29 @@ export const useDatasetStore = defineStore('datasetStore', {
       const simData = await d3.csv('./data/sim.csv')
       const thresholdData = await d3.csv('./data/quantiles.csv')
       const periods: any[] = []
+
       await Promise.all([
         d3.csv('./data/period0.csv'),
         d3.csv('./data/period1.csv'),
+        d3.csv('./data/period2.csv'),
+        d3.csv('./data/period3.csv'),
       ]).then((files) => {
         files.forEach((file) => {
           periods.push(file)
         })
       })
 
-      const topicNames = Object.keys(simData[0]).filter(
-        (topicName) => topicName.length > 0
-      )
-
-      this.topics = topicNames.map((topicName) => ({
-        id: topicName,
-        periods: [],
-      }))
+      this.topics = Object.keys(simData[0])
+        .filter((topicName) => topicName.length > 0)
+        .map((topicName) => ({
+          id: topicName,
+          periods: [],
+        }))
 
       this.topics.forEach((topic, topicIndex) => {
-        simData.slice(1).forEach((period, periodIndex) => {
+        simData.forEach((period, periodIndex) => {
           const similarity = period[topic.id] ?? 0
-          const threshold = thresholdData.slice(1)[periodIndex][topic.id] ?? 0
+          const threshold = thresholdData[periodIndex][topic.id] ?? 0
 
           const words = periods[periodIndex]
             ? Object.entries(

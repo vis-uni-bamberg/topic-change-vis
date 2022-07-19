@@ -8,7 +8,7 @@
       <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
       <g>
         <EventSequenceVariableLine
-          :events="topic.periods"
+          :events="topic.periods.slice(1)"
           :x-scale="xScale"
           :y-scale="yScale"
           variable="similarity"
@@ -16,7 +16,7 @@
           :glyph-size="glyphSize"
         />
         <EventSequenceVariableLine
-          :events="topic.periods"
+          :events="topic.periods.slice(1)"
           :x-scale="xScale"
           :y-scale="yScale"
           variable="threshold"
