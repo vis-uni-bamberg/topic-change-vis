@@ -26,7 +26,13 @@
               :x="(index * width) / periodCount / periodCount"
               :width="width / periodCount / periodCount"
               :height="height"
-              :fill="getFill(outerTopic, innerTopic, period, index)"
+              :fill="
+                similarityScale(
+                  Math.abs(
+                    period.similarity - outerTopic.periods[index]?.threshold
+                  )
+                )
+              "
             />
           </svg>
         </div>
@@ -54,18 +60,4 @@
   const height = 2
 
   const similarityScale = d3.interpolateGreys
-
-  function getFill(
-    outerTopic: Topic,
-    innerTopic: Topic,
-    period: TopicPeriod,
-    index: number
-  ) {
-    if (outerTopic.id === innerTopic.id) {
-      return datasetStore.colorScale(outerTopic.id)
-    }
-    return similarityScale(
-      Math.abs(period.similarity - outerTopic.periods[index]?.threshold)
-    )
-  }
 </script>
