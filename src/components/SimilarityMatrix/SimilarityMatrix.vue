@@ -15,7 +15,7 @@
         :key="innerTopic.id"
         class="border-1 border-slate-900"
       >
-        <div>
+        <div v-if="outerTopic.id !== innerTopic.id">
           <svg
             class="matrix-cell"
             :viewBox="`0 0 ${width / periodCount} ${height}`"
@@ -30,6 +30,11 @@
             />
           </svg>
         </div>
+        <div
+          v-else
+          class="w-full h-5"
+          :style="'background-color: ' + datasetStore.colorScale(outerTopic.id)"
+        ></div>
       </td>
     </tr>
   </table>
