@@ -47,8 +47,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { Topic } from '@/models/Topic'
-  import { TopicPeriod } from '@/models/TopicPeriod'
   import { useDatasetStore } from '@/stores/datasetStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
