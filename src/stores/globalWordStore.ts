@@ -9,12 +9,17 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
   },
   actions: {
     loadData(payload: MyWord[][][]): void {
+      //topic -> period -> words
       this.words = payload
     },
   },
   getters: {
     aggregatedWords: (state) => {
       return state.words.flat().flat()
+    },
+
+    wordsForTopic: (state) => {
+      return (topicIndex: number) => state.words[topicIndex].flat()
     },
   },
 })
