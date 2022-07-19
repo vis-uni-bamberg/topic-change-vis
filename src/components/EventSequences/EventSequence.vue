@@ -3,6 +3,7 @@
     :viewBox="`0 0 ${width + margin.left + margin.right} ${
       height + margin.top + margin.bottom
     }`"
+    @click="selectTopic()"
   >
     <g :transform="`translate(${[margin.left, margin.top]})`">
       <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
@@ -48,6 +49,9 @@
   import { config } from '@/config'
   import { Topic } from '@/models/Topic'
   import { toRefs } from 'vue'
+  import { useTopicStore } from '@/stores/topicStore'
+
+  const topicStore = useTopicStore()
 
   const props = defineProps<{
     topic: Topic
@@ -77,4 +81,11 @@
     [margin.left, height / 2],
     [width - margin.right, height / 2],
   ])
+
+  function selectTopic(): void {
+    topicStore.updateSelectedTopic({
+      id: props.topic.id,
+      index: +props.topic.id.slice(1) - 1,
+    })
+  }
 </script>

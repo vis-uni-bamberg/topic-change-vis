@@ -10,7 +10,7 @@
     >
       <WordElement
         v-for="word in wordCloud.words()"
-        :key="word.word"
+        :key="word.word + word.count"
         :x="word.x"
         :y="word.y"
         :size="word.size"
@@ -18,6 +18,9 @@
       />
     </g>
   </svg>
+  <button @click="topicStore.updateSelectedTopic({ id: 'V1', index: 0 })">
+    Update
+  </button>
 </template>
 
 <script lang="ts" setup>
@@ -27,9 +30,14 @@
   import { storeToRefs } from 'pinia'
   import WordElement from './WordElement.vue'
   import { MyWord } from '@/models/Word'
+  import { useTopicStore } from '@/stores/topicStore'
+  import { ref, watchEffect } from 'vue'
 
   const globalWordStore = useGlobalWordStore()
-  const { aggregatedWords } = storeToRefs(globalWordStore)
+  const { aggregatedWords, wordsForTopic } = storeToRefs(globalWordStore)
+
+  const topicStore = useTopicStore()
+  const { selectedTopic } = storeToRefs(topicStore)
 
   const margin = {
     top: 5,
@@ -38,24 +46,43 @@
     left: 5,
   }
   const width = 400
-  const height = 1050
+  const height = 650
 
   const wordSizeScale = d3
     .scaleLinear()
-    .domain([0, Math.max(...aggregatedWords.value.map((word) => word.count))])
+    .domain([
+      0,
+      Math.max(
+        ...wordsForTopic
+          .value(selectedTopic.value.index)
+          .map((word) => word.count)
+      ),
+    ])
     .range([0, 80])
 
-  const wordCloud = cloud<MyWord>()
-    .size([
-      width - margin.left - margin.right,
-      height - margin.top - margin.bottom,
-    ])
-    .words(aggregatedWords.value as MyWord[])
-    .text((d) => d.word)
-    .padding(1)
-    .rotate(() => 0)
-    .spiral('rectangular')
-    .fontSize((d) => wordSizeScale(+d.count))
+  let wordCloud = ref(
+    buildWordCloud(wordsForTopic.value(selectedTopic.value.index))
+  )
 
-  wordCloud.start()
+  watchEffect(() => {
+    wordCloud.value = buildWordCloud(
+      wordsForTopic.value(selectedTopic.value.index)
+    )
+  })
+
+  function buildWordCloud(words: MyWord[]) {
+    const layout = cloud<MyWord>()
+      .size([
+        width - margin.left - margin.right,
+        height - margin.top - margin.bottom,
+      ])
+      .words(words)
+      .text((d) => d.word)
+      .padding(1)
+      .rotate(() => 0)
+      .spiral('rectangular')
+      .fontSize((d) => wordSizeScale(+d.count))
+
+    return layout.start()
+  }
 </script>
