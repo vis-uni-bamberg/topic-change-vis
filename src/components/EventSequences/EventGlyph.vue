@@ -1,7 +1,7 @@
 <template>
   <rect
-    :x="x - size / 2"
-    :y="selected?.id === data.id ? y + 10 : y"
+    :x="x - size"
+    :y="y + size / 2"
     :width="size"
     :height="size"
     :fill="color"
@@ -11,15 +11,26 @@
     @mouseleave="hoverEvent(null)"
     @click="selectEvent(data)"
   />
+  <path
+    :d="
+      leader([
+        [x - size / 2, y + size / 2],
+        [x - size / 2, y],
+      ])!
+    "
+    :stroke="color"
+  >
+  </path>
 </template>
 
 <script lang="ts" setup>
   import { TopicPeriod } from '@/models/TopicPeriod'
   import { useEventStore } from '@/stores/eventStore'
   import { storeToRefs } from 'pinia'
+  import { line } from 'd3-shape'
 
   const eventStore = useEventStore()
-  const { selected, hovered } = storeToRefs(eventStore)
+  const { hovered } = storeToRefs(eventStore)
 
   defineProps<{
     data: TopicPeriod
@@ -28,6 +39,8 @@
     size: number
     color: string
   }>()
+
+  const leader = line()
 
   const hoverEvent = (event: TopicPeriod | null) => {
     eventStore.setHovered(event)

@@ -33,7 +33,7 @@
           :key="period.id"
           :data="period"
           :x="xScale(topic.periods.indexOf(period))"
-          :y="height / 2 - glyphSize / 2"
+          :y="yScale(period.similarity)"
           :size="glyphSize"
           :color="color"
         />
