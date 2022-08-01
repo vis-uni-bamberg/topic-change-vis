@@ -11,7 +11,9 @@ export const useTopicStore = defineStore('topicStore', {
   },
   actions: {
     updateSelectedTopic(topic: { id: string; index: number }): void {
-      this.selectedTopic = topic
+      if (this.selectedTopic !== topic) {
+        this.selectedTopic = topic
+      }
     },
   },
   getters: {},
