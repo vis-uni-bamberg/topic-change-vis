@@ -1,19 +1,21 @@
+import { Topic } from '@/models/Topic'
 import { defineStore } from 'pinia'
 
 export const useTopicStore = defineStore('topicStore', {
   state: () => {
     return {
-      selectedTopic: {
-        id: 'V2',
-        index: 1,
-      },
+      selectedTopic: null as Topic | null,
     }
   },
   actions: {
-    updateSelectedTopic(topic: { id: string; index: number }): void {
-      if (this.selectedTopic !== topic) {
-        this.selectedTopic = topic
+    updateSelectedTopic(topic: Topic): void {
+      if (this.selectedTopic) {
+        if (topic.id !== this.selectedTopic.id) {
+          this.selectedTopic = topic
+        }
+        this.selectedTopic = null
       }
+      this.selectedTopic = topic
     },
   },
   getters: {},

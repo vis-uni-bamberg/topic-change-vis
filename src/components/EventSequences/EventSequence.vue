@@ -83,9 +83,6 @@
   ])
 
   function selectTopic(): void {
-    topicStore.updateSelectedTopic({
-      id: props.topic.id,
-      index: +props.topic.id.slice(1) - 1,
-    })
+    topicStore.updateSelectedTopic(props.topic)
   }
 </script>

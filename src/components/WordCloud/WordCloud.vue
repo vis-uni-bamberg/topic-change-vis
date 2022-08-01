@@ -31,7 +31,7 @@
   import { ref, watchEffect } from 'vue'
 
   const globalWordStore = useGlobalWordStore()
-  const { aggregatedWords, wordsForTopic } = storeToRefs(globalWordStore)
+  const { allWords, words } = storeToRefs(globalWordStore)
 
   const topicStore = useTopicStore()
   const { selectedTopic } = storeToRefs(topicStore)
@@ -47,24 +47,13 @@
 
   const wordSizeScale = d3
     .scaleLinear()
-    .domain([
-      0,
-      Math.max(
-        ...wordsForTopic
-          .value(selectedTopic.value.index)
-          .map((word) => word.count)
-      ),
-    ])
+    .domain([0, Math.max(...words.value.map((word) => word.count))])
     .range([0, 80])
 
-  let wordCloud = ref(
-    buildWordCloud(wordsForTopic.value(selectedTopic.value.index))
-  )
+  let wordCloud = ref(buildWordCloud(words.value))
 
   watchEffect(() => {
-    wordCloud.value = buildWordCloud(
-      wordsForTopic.value(selectedTopic.value.index)
-    )
+    wordCloud.value = buildWordCloud(words.value)
   })
 
   function buildWordCloud(words: MyWord[]) {
