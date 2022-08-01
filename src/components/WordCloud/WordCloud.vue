@@ -18,9 +18,6 @@
       />
     </g>
   </svg>
-  <button @click="topicStore.updateSelectedTopic({ id: 'V1', index: 0 })">
-    Update
-  </button>
 </template>
 
 <script lang="ts" setup>
