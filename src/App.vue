@@ -6,9 +6,13 @@
   import SimilarityMatrix from './components/SimilarityMatrix/SimilarityMatrix.vue'
   import { useDatasetStore } from './stores/datasetStore'
   import { useGlobalWordStore } from './stores/globalWordStore'
+  import { useTopicStore } from './stores/topicStore'
+  import { storeToRefs } from 'pinia'
 
   const datasetStore = useDatasetStore()
   const wordCloudStore = useGlobalWordStore()
+  const topicStore = useTopicStore()
+  const { selectedTopic } = storeToRefs(topicStore)
   datasetStore.loadData()
 </script>
 
@@ -17,7 +21,11 @@
     <BRow>
       <BCol>
         <BListGroup>
-          <BListGroupItem v-for="topic in datasetStore.topics" :key="topic.id">
+          <BListGroupItem
+            v-for="topic in datasetStore.topics"
+            :key="topic.id"
+            :active="selectedTopic.id === topic.id"
+          >
             {{ topic.id }}
             <EventSequence
               :topic="topic"
