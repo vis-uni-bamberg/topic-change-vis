@@ -48,7 +48,7 @@ export const useDatasetStore = defineStore('datasetStore', {
                 .slice(1)
                 .map((word) => ({
                   word: word[0],
-                  count: word[1] as number,
+                  count: +(word[1] as string),
                 }))
                 .filter((word) => word.count > 100)
             : []
@@ -63,9 +63,7 @@ export const useDatasetStore = defineStore('datasetStore', {
       })
 
       const globalWordStore = useGlobalWordStore()
-      globalWordStore.loadData(
-        this.topics.map((topic) => topic.periods.map((period) => period.words))
-      )
+      globalWordStore.loadData(this.topics)
     },
   },
   getters: {

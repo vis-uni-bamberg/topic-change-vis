@@ -35,7 +35,7 @@
         </BListGroup>
       </BCol>
       <BCol>
-        <BRow v-if="wordCloudStore.words.length > 0">
+        <BRow v-if="wordCloudStore.allWords.length > 0">
           <WordCloud />
         </BRow>
         <BRow>

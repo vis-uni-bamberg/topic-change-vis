@@ -15,6 +15,16 @@
         :y="word.y"
         :size="word.size"
         :text="word.word"
+        :color="
+          words[selectedTopic?.id]
+            ? words[selectedTopic?.id]
+                .map((period) => period.words)
+                .flat()
+                .find((periodWord) => periodWord.word === word.word)
+              ? 'blue'
+              : 'black'
+            : 'black'
+        "
       />
     </g>
   </svg>
@@ -47,13 +57,13 @@
 
   const wordSizeScale = d3
     .scaleLinear()
-    .domain([0, Math.max(...words.value.map((word) => word.count))])
-    .range([0, 80])
+    .domain([0, Math.max(...allWords.value.map((word) => word.count))])
+    .range([10, 80])
 
-  let wordCloud = ref(buildWordCloud(words.value))
+  let wordCloud = ref(buildWordCloud(allWords.value))
 
   watchEffect(() => {
-    wordCloud.value = buildWordCloud(words.value)
+    wordCloud.value = buildWordCloud(allWords.value)
   })
 
   function buildWordCloud(words: MyWord[]) {
