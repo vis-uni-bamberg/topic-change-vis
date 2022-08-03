@@ -48,9 +48,6 @@
   import { config } from '@/config'
   import { Topic } from '@/models/Topic'
   import { toRefs } from 'vue'
-  import { useTopicStore } from '@/stores/topicStore'
-
-  const topicStore = useTopicStore()
 
   const props = defineProps<{
     topic: Topic
