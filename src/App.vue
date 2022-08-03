@@ -24,7 +24,8 @@
           <BListGroupItem
             v-for="topic in datasetStore.topics"
             :key="topic.id"
-            :active="selectedTopic?.id === topic.id"
+            :active="selectedTopic.id === topic.id"
+            @click="topicStore.updateSelectedTopic(topic)"
           >
             {{ topic.id }}
             <EventSequence
