@@ -24,14 +24,15 @@
           <BListGroupItem
             v-for="topic in datasetStore.topics"
             :key="topic.id"
-            :active="selectedTopic.id === topic.id"
             @click="topicStore.updateSelectedTopic(topic)"
           >
-            {{ topic.id }}
-            <EventSequence
-              :topic="topic"
-              :color="datasetStore.colorScale(topic.id)"
-            />
+            <div :class="selectedTopic.id === topic.id ? 'bg-slate-300' : ''">
+              {{ topic.id }}
+              <EventSequence
+                :topic="topic"
+                :color="datasetStore.colorScale(topic.id)"
+              />
+            </div>
           </BListGroupItem>
         </BListGroup>
       </BCol>
