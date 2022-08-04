@@ -15,16 +15,18 @@ export const useDatasetStore = defineStore('datasetStore', {
       const thresholdData = await d3.csv('./data/quantiles.csv')
       const periods: any[] = []
 
-      await Promise.all([
-        d3.csv('./data/period0.csv'),
-        d3.csv('./data/period1.csv'),
-        d3.csv('./data/period2.csv'),
-        d3.csv('./data/period3.csv'),
-      ]).then((files) => {
-        files.forEach((file) => {
-          periods.push(file)
-        })
-      })
+      const filenames = []
+      for (let i = 0; i < 79; i++) {
+        filenames.push('./data/periods/period' + i + '.csv')
+      }
+
+      await Promise.all(filenames.map((filename) => d3.csv(filename))).then(
+        (files) => {
+          files.forEach((file) => {
+            periods.push(file)
+          })
+        }
+      )
 
       this.topics = Object.keys(simData[0])
         .filter((topicName) => topicName.length > 0)

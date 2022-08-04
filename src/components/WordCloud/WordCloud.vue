@@ -56,7 +56,7 @@
   const height = 650
 
   const wordSizeScale = d3
-    .scaleLinear()
+    .scaleSqrt()
     .domain([0, Math.max(...allWords.value.map((word) => word.count))])
     .range([10, 80])
 
