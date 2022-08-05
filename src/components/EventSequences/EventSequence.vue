@@ -1,9 +1,5 @@
 <template>
-  <svg
-    :viewBox="`0 0 ${width + margin.left + margin.right} ${
-      height + margin.top + margin.bottom
-    }`"
-  >
+  <svg :viewBox="`0 0 ${width} ${height}`">
     <g :transform="`translate(${[margin.left, margin.top]})`">
       <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
       <g>
@@ -69,12 +65,15 @@
   const xScale = d3
     .scaleLinear()
     .domain([0, topic.value.periods.length - 1])
-    .range([margin.left, width - margin.right])
+    .range([0, width - margin.left - margin.right])
 
-  const yScale = d3.scaleLinear().domain([0, 1]).range([height, 0])
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, 1])
+    .range([height - margin.bottom, 0])
 
   const connectionLine = d3.line()([
-    [margin.left, height / 2],
-    [width - margin.right, height / 2],
+    [xScale.range()[0], (yScale.range()[0] + yScale.range()[1]) / 2],
+    [xScale.range()[1], (yScale.range()[0] + yScale.range()[1]) / 2],
   ])
 </script>
