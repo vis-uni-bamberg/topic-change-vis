@@ -1,16 +1,15 @@
 <template>
-  <rect
-    :x="x - size"
-    :y="y + size / 2"
-    :width="size"
-    :height="size"
-    :fill="color"
-    :stroke-width="hovered?.id === data.id ? 2 : 1"
-    stroke="black"
-    @mouseover="hoverEvent(data)"
-    @mouseleave="hoverEvent(null)"
-    @click="selectEvent(data)"
-  />
+  <g :transform="`translate(${x - size},${y + size / 2})`">
+    <polygon
+      :points="`0,${size} ${size},${size} ${size / 2},0`"
+      :fill="color"
+      :stroke-width="hovered?.id === data.id ? 2 : 1"
+      stroke="black"
+      @mouseover="hoverEvent(data)"
+      @mouseleave="hoverEvent(null)"
+      @click="selectEvent(data)"
+    />
+  </g>
   <path
     :d="
       leader([
