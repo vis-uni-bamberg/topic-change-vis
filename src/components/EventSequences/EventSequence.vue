@@ -4,19 +4,19 @@
       <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
       <g>
         <EventSequenceVariableLine
-          :events="topic.periods.slice(1)"
-          :x-scale="xScale"
-          :y-scale="yScale"
-          variable="similarity"
-          :color="color"
-          :glyph-size="glyphSize"
-        />
-        <EventSequenceVariableLine
-          :events="topic.periods.slice(1)"
+          :events="topic.periods"
           :x-scale="xScale"
           :y-scale="yScale"
           variable="threshold"
           color="black"
+          :glyph-size="glyphSize"
+        />
+        <EventSequenceVariableLine
+          :events="topic.periods"
+          :x-scale="xScale"
+          :y-scale="yScale"
+          variable="similarity"
+          :color="color"
           :glyph-size="glyphSize"
         />
       </g>
@@ -60,20 +60,19 @@
   }
   const width = 400
   const height = 50
+  const xRange = width - margin.left - margin.right
+  const yRange = height - margin.top - margin.bottom
   const glyphSize = config.eventGlyphSize
 
   const xScale = d3
     .scaleLinear()
     .domain([0, topic.value.periods.length - 1])
-    .range([0, width - margin.left - margin.right])
+    .range([0, xRange])
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, 1])
-    .range([height - margin.bottom, 0])
+  const yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])
 
   const connectionLine = d3.line()([
-    [xScale.range()[0], (yScale.range()[0] + yScale.range()[1]) / 2],
-    [xScale.range()[1], (yScale.range()[0] + yScale.range()[1]) / 2],
+    [xScale.range()[0], yRange / 2],
+    [xScale.range()[1], yRange / 2],
   ])
 </script>

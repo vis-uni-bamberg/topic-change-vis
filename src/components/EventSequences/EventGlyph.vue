@@ -1,25 +1,29 @@
 <template>
-  <g :transform="`translate(${x - size},${y + size / 2})`">
-    <polygon
-      :points="`0,${size} ${size},${size} ${size / 2},0`"
-      :fill="color"
-      :stroke-width="hovered?.id === data.id ? 2 : 1"
-      stroke="black"
-      @mouseover="hoverEvent(data)"
-      @mouseleave="hoverEvent(null)"
-      @click="selectEvent(data)"
-    />
-  </g>
-  <path
-    :d="
+  <g :transform="`translate(${x},${y})`">
+    <g :transform="`translate(0,${size})`">
+      <polygon
+        :points="`${-size / 2},${size / 2} ${size / 2},${size / 2} 0,${
+          -size / 2
+        }`"
+        :fill="color"
+        :stroke-width="hovered?.id === data.id ? 2 : 1"
+        stroke="black"
+        @mouseover="hoverEvent(data)"
+        @mouseleave="hoverEvent(null)"
+        @click="selectEvent(data)"
+      />
+    </g>
+    <path
+      :d="
       leader([
-        [x - size / 2, y + size / 2],
-        [x - size / 2, y],
+        [0, 0],
+        [0, size / 2],
       ])!
     "
-    :stroke="color"
-  >
-  </path>
+      :stroke="color"
+    >
+    </path>
+  </g>
 </template>
 
 <script lang="ts" setup>

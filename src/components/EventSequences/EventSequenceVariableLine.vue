@@ -23,6 +23,6 @@
     d3
       .line<TopicPeriod>()
       .x((d: TopicPeriod, i: number) => props.xScale(i))
-      .y((d: TopicPeriod): number => props.yScale(d[accessor] as number))
+      .y((d: TopicPeriod): number => props.yScale(d[accessor] as number) ?? 0)
       .curve(d3.curveCatmullRom.alpha(0.5))
 </script>
