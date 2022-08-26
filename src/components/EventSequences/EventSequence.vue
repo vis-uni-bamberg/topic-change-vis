@@ -1,40 +1,47 @@
 <template>
-  <svg :viewBox="`0 0 ${width} ${height}`">
-    <g :transform="`translate(${[margin.left, margin.top]})`">
-      <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
-      <g>
-        <EventSequenceVariableLine
-          :events="topic.periods"
-          :x-scale="xScale"
-          :y-scale="yScale"
-          variable="threshold"
-          color="black"
-          :glyph-size="glyphSize"
-        />
-        <EventSequenceVariableLine
-          :events="topic.periods"
-          :x-scale="xScale"
-          :y-scale="yScale"
-          variable="similarity"
-          :color="color"
-          :glyph-size="glyphSize"
-        />
+  <div>
+    <svg :viewBox="`0 0 ${width} ${height}`">
+      <EventSequenceAxis
+        :top="margin.top"
+        :bottom="height - margin.bottom"
+        :left="margin.left"
+      />
+      <g :transform="`translate(${[margin.left, margin.top]})`">
+        <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
+        <g>
+          <EventSequenceVariableLine
+            :events="topic.periods"
+            :x-scale="xScale"
+            :y-scale="yScale"
+            variable="threshold"
+            color="black"
+            :glyph-size="glyphSize"
+          />
+          <EventSequenceVariableLine
+            :events="topic.periods"
+            :x-scale="xScale"
+            :y-scale="yScale"
+            variable="similarity"
+            :color="color"
+            :glyph-size="glyphSize"
+          />
+        </g>
+        <g>
+          <EventGlyph
+            v-for="period in topic.periods.filter(
+              (period) => period.similarity <= period.threshold
+            )"
+            :key="period.id"
+            :data="period"
+            :x="xScale(topic.periods.indexOf(period))"
+            :y="yScale(period.similarity)"
+            :size="glyphSize"
+            :color="color"
+          />
+        </g>
       </g>
-      <g>
-        <EventGlyph
-          v-for="period in topic.periods.filter(
-            (period) => period.similarity <= period.threshold
-          )"
-          :key="period.id"
-          :data="period"
-          :x="xScale(topic.periods.indexOf(period))"
-          :y="yScale(period.similarity)"
-          :size="glyphSize"
-          :color="color"
-        />
-      </g>
-    </g>
-  </svg>
+    </svg>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -44,6 +51,7 @@
   import { config } from '@/config'
   import { Topic } from '@/models/Topic'
   import { toRefs } from 'vue'
+  import EventSequenceAxis from './EventSequenceAxis.vue'
 
   const props = defineProps<{
     topic: Topic
@@ -53,9 +61,9 @@
   const { topic } = toRefs(props)
 
   const margin = {
-    top: 5,
+    top: 1,
     right: 5,
-    bottom: 5,
+    bottom: 1,
     left: 5,
   }
   const width = 400
