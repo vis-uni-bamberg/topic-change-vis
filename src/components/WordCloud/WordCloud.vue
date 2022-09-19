@@ -21,7 +21,7 @@
                 .map((period) => period.words)
                 .flat()
                 .find((periodWord) => periodWord.word === word.word)
-              ? 'blue'
+              ? topicColor
               : 'black'
             : 'black'
         "
@@ -44,7 +44,7 @@
   const { allWords, words } = storeToRefs(globalWordStore)
 
   const topicStore = useTopicStore()
-  const { selectedTopic } = storeToRefs(topicStore)
+  const { selectedTopic, topicColor } = storeToRefs(topicStore)
 
   const margin = {
     top: 5,
