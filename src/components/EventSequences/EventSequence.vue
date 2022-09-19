@@ -41,6 +41,7 @@
         </g>
       </g>
     </svg>
+    <WordFrequencyChart :color="color" :topic="topic" :x-scale="xScale" />
   </div>
 </template>
 
@@ -52,6 +53,7 @@
   import { Topic } from '@/models/Topic'
   import { toRefs } from 'vue'
   import EventSequenceAxis from './EventSequenceAxis.vue'
+  import WordFrequencyChart from './WordFrequencyChart.vue'
 
   const props = defineProps<{
     topic: Topic
