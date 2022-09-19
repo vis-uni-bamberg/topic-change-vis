@@ -43,8 +43,8 @@ export const useDatasetStore = defineStore('datasetStore', {
           const words = periods[periodIndex]
             ? Object.entries(
                 periods[periodIndex]?.find(
-                  (period: { [x: string]: number }) =>
-                    period[''] == topicIndex + 1
+                  (period: { [x: string]: string }) =>
+                    +period[''] === topicIndex + 1
                 )
               )
                 .slice(1)
