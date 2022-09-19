@@ -21,7 +21,10 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
           if (word) {
             word.count += otherWord.count
           } else {
-            words.push(otherWord)
+            words.push({
+              word: otherWord.word,
+              count: otherWord.count,
+            })
           }
           return words
         }, [])
