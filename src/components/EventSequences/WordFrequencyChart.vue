@@ -24,12 +24,16 @@
 </template>
 <script setup lang="ts">
   import { Topic } from '@/models/Topic'
+  import { useGlobalWordStore } from '@/stores/globalWordStore'
   import { useWordStore } from '@/stores/wordStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
 
   const wordStore = useWordStore()
   const { selectedWord } = storeToRefs(wordStore)
+
+  const maxPeriodWordCount = useGlobalWordStore().maxPeriodWordCount
+  console.log(maxPeriodWordCount)
 
   defineProps<{
     topic: Topic
@@ -48,5 +52,8 @@
   const xRange = width - margin.left - margin.right
   const yRange = height - margin.top - margin.bottom
 
-  const yScale = d3.scaleLinear().domain([0, 200]).range([yRange, 0])
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, maxPeriodWordCount])
+    .range([yRange, 0])
 </script>

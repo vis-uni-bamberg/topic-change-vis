@@ -7,6 +7,7 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
     return {
       allWords: [] as MyWord[],
       words: { '': [] } as { [key: string]: MyWord[] },
+      maxPeriodWordCount: 0,
     }
   },
   actions: {
@@ -50,6 +51,18 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
         }),
         {}
       )
+
+      let max = 0
+      payload
+        .map((topic) => topic.periods.map((period) => period.words))
+        .flat()
+        .flat()
+        .forEach((word) => {
+          if (word.count > max) {
+            max = word.count
+          }
+        })
+      this.maxPeriodWordCount = max
     },
   },
   getters: {},
