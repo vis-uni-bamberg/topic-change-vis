@@ -13,7 +13,7 @@
   </text>
   <rect
     v-if="text === wordStore.selectedWord"
-    :transform="`translate(${-textWidth / 2} ${-textHeight})`"
+    :transform="`translate(${-textWidth / 2} ${-textHeight * 0.75})`"
     :x="x"
     :y="y"
     :width="textWidth"
