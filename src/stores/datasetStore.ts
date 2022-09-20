@@ -52,7 +52,7 @@ export const useDatasetStore = defineStore('datasetStore', {
                   word: word[0],
                   count: +(word[1] as string),
                 }))
-                .filter((word) => word.count > 100)
+                .filter((word) => word.count > 10)
             : []
 
           topic.periods.push({
