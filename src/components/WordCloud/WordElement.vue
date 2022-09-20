@@ -6,7 +6,15 @@
     :y="y"
     :font-size="size"
     :text-anchor="'middle'"
-    :fill="color"
+    :fill="
+      words[selectedTopic?.id]
+        ? words[selectedTopic?.id].find(
+            (wordInTopic) => wordInTopic.word === props.text
+          )?.count! > 200
+          ? topicColor
+          : 'black'
+        : 'black'
+    "
     @click="wordStore.updateSelectedWord(text!)"
   >
     {{ text }}
@@ -27,6 +35,15 @@
   import { useWordStore } from '@/stores/wordStore'
   import { onMounted, ref } from 'vue'
   import * as d3 from 'd3'
+  import { storeToRefs } from 'pinia'
+  import { useGlobalWordStore } from '@/stores/globalWordStore'
+  import { useTopicStore } from '@/stores/topicStore'
+
+  const globalWordStore = useGlobalWordStore()
+  const { words } = storeToRefs(globalWordStore)
+
+  const topicStore = useTopicStore()
+  const { selectedTopic, topicColor } = storeToRefs(topicStore)
 
   const wordStore = useWordStore()
 
@@ -35,7 +52,6 @@
     y: number | undefined
     size: number | undefined
     text: string | undefined
-    color: string | undefined
   }>()
 
   let textWidth = ref(0)

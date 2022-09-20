@@ -15,16 +15,6 @@
         :y="word.y"
         :size="word.size"
         :text="word.word"
-        :color="
-          words[selectedTopic?.id]
-            ? words[selectedTopic?.id]
-                .map((period) => period.words)
-                .flat()
-                .find((periodWord) => periodWord.word === word.word)
-              ? topicColor
-              : 'black'
-            : 'black'
-        "
       />
     </g>
   </svg>
@@ -37,14 +27,10 @@
   import { storeToRefs } from 'pinia'
   import WordElement from './WordElement.vue'
   import { MyWord } from '@/models/Word'
-  import { useTopicStore } from '@/stores/topicStore'
   import { ref, watchEffect } from 'vue'
 
   const globalWordStore = useGlobalWordStore()
-  const { allWords, words } = storeToRefs(globalWordStore)
-
-  const topicStore = useTopicStore()
-  const { selectedTopic, topicColor } = storeToRefs(topicStore)
+  const { allWords } = storeToRefs(globalWordStore)
 
   const margin = {
     top: 5,
