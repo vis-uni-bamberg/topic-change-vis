@@ -8,7 +8,9 @@
   import { useGlobalWordStore } from './stores/globalWordStore'
   import { useTopicStore } from './stores/topicStore'
   import { storeToRefs } from 'pinia'
+  import { useSimilarityStore } from './stores/similarityStore'
 
+  const similarityStore = useSimilarityStore()
   const datasetStore = useDatasetStore()
   const wordCloudStore = useGlobalWordStore()
   const topicStore = useTopicStore()
@@ -40,7 +42,11 @@
         <BRow v-if="wordCloudStore.allWords.length > 0">
           <WordCloud />
         </BRow>
-        <BRow>
+        <BRow
+          v-if="
+            Object.keys(similarityStore.similaritiesBetweenTopics).length > 0
+          "
+        >
           <SimilarityMatrix />
         </BRow>
       </BCol>

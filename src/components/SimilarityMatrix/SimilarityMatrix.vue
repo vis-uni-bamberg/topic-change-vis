@@ -28,9 +28,10 @@
               :height="height"
               :fill="
                 similarityScale(
-                  Math.abs(
-                    period.similarity - outerTopic.periods[index]?.threshold
-                  )
+                  similaritiesBetweenTopics[index][outerTopic.id.slice(1)].find(
+                    (similarity) =>
+                      similarity.otherTopicId === innerTopic.id.slice(1)
+                  )?.similarity ?? 0
                 )
               "
             />
@@ -48,11 +49,24 @@
 
 <script lang="ts" setup>
   import { useDatasetStore } from '@/stores/datasetStore'
+  import { useSimilarityStore } from '@/stores/similarityStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
 
   const datasetStore = useDatasetStore()
   const { topics, periodCount } = storeToRefs(datasetStore)
+
+  const similarityStore = useSimilarityStore()
+  const { similaritiesBetweenTopics } = storeToRefs(similarityStore)
+
+  // const period = '1'
+  // const topic = '1'
+  // const otherTopic = '2'
+  // console.log(
+  //   similaritiesBetweenTopics.value[period][topic].find(
+  //     (similarity) => similarity.otherTopicId === otherTopic
+  //   )?.similarity
+  // )
 
   const width = 300
   const height = 2
