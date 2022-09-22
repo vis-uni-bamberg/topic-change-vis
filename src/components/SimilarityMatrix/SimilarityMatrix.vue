@@ -28,10 +28,21 @@
               :height="height"
               :fill="
                 similarityScale(
-                  Math.abs(
-                    period.similarity - outerTopic.periods[index]?.threshold
-                  )
+                  similaritiesBetweenTopics[index.toString()][
+                    innerTopic.id.slice(1)
+                  ]?.find(
+                    (similarity) =>
+                      similarity.otherTopicId === 'V' + outerTopic.id
+                  )?.similarity ?? 0
                 )
+              "
+              :title="
+                similaritiesBetweenTopics[index.toString()][
+                  innerTopic.id.slice(1)
+                ]?.find(
+                  (similarity) =>
+                    similarity.otherTopicId === 'V' + outerTopic.id
+                )?.similarity ?? 0
               "
             />
           </svg>
@@ -48,11 +59,15 @@
 
 <script lang="ts" setup>
   import { useDatasetStore } from '@/stores/datasetStore'
+  import { useSimilarityStore } from '@/stores/similarityStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
 
   const datasetStore = useDatasetStore()
   const { topics, periodCount } = storeToRefs(datasetStore)
+
+  const similarityStore = useSimilarityStore()
+  const { similaritiesBetweenTopics } = storeToRefs(similarityStore)
 
   const width = 300
   const height = 2

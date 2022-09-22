@@ -2,6 +2,7 @@ import { Topic } from '@/models/Topic'
 import * as d3 from 'd3'
 import { defineStore } from 'pinia'
 import { useGlobalWordStore } from './globalWordStore'
+import { useSimilarityStore } from './similarityStore'
 
 export const useDatasetStore = defineStore('datasetStore', {
   state: () => {
@@ -66,6 +67,8 @@ export const useDatasetStore = defineStore('datasetStore', {
 
       const globalWordStore = useGlobalWordStore()
       globalWordStore.loadData(this.topics)
+
+      useSimilarityStore().loadSimilarities()
     },
   },
   getters: {
