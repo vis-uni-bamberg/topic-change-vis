@@ -28,21 +28,11 @@
               :height="height"
               :fill="
                 similarityScale(
-                  similaritiesBetweenTopics[index.toString()][
-                    innerTopic.id.slice(1)
-                  ]?.find(
+                  similaritiesBetweenTopics[index][outerTopic.id.slice(1)].find(
                     (similarity) =>
-                      similarity.otherTopicId === 'V' + outerTopic.id
+                      similarity.otherTopicId === innerTopic.id.slice(1)
                   )?.similarity ?? 0
                 )
-              "
-              :title="
-                similaritiesBetweenTopics[index.toString()][
-                  innerTopic.id.slice(1)
-                ]?.find(
-                  (similarity) =>
-                    similarity.otherTopicId === 'V' + outerTopic.id
-                )?.similarity ?? 0
               "
             />
           </svg>
@@ -68,6 +58,15 @@
 
   const similarityStore = useSimilarityStore()
   const { similaritiesBetweenTopics } = storeToRefs(similarityStore)
+
+  // const period = '1'
+  // const topic = '1'
+  // const otherTopic = '2'
+  // console.log(
+  //   similaritiesBetweenTopics.value[period][topic].find(
+  //     (similarity) => similarity.otherTopicId === otherTopic
+  //   )?.similarity
+  // )
 
   const width = 300
   const height = 2

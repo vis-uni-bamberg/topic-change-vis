@@ -14,7 +14,7 @@ export const useSimilarityStore = defineStore('similarityStore', {
       const filenames = []
       for (let i = 0; i < 79; i++) {
         filenames.push(
-          './data/similarities_between_topics/similarity_between_topics' +
+          './data/similarities_between_topics/similarity_beteen_topics' +
             i +
             '.csv'
         )
@@ -28,11 +28,12 @@ export const useSimilarityStore = defineStore('similarityStore', {
               Object.keys(topic)
                 .slice(1)
                 .forEach((otherTopicId) => {
-                  if (!similarities[period.toString()][topic['']]) {
-                    similarities[period.toString()][topic['']] = []
+                  const topicNumber = topic[''] ?? '-1'
+                  if (!similarities[period.toString()][topicNumber]) {
+                    similarities[period.toString()][topicNumber] = []
                   }
-                  similarities[period.toString()][topic['']].push({
-                    otherTopicId: otherTopicId,
+                  similarities[period.toString()][topicNumber].push({
+                    otherTopicId: otherTopicId.slice(1),
                     similarity: +(topic[otherTopicId] ?? 0),
                   })
                 })
@@ -41,7 +42,6 @@ export const useSimilarityStore = defineStore('similarityStore', {
         }
       )
       this.similaritiesBetweenTopics = similarities
-      console.log(similarities)
     },
   },
   getters: {},
