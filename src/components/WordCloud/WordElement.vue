@@ -1,12 +1,11 @@
 <template>
-  <text
-    :id="`text-element-${text}`"
-    class="cursor-pointer"
-    :x="x"
-    :y="y"
-    :font-size="size"
-    :text-anchor="'middle'"
-    :fill="
+  <g :transform="`translate(${x}, ${y})`">
+    <text
+      :id="`text-element-${text}`"
+      class="cursor-pointer"
+      :font-size="size"
+      :text-anchor="'middle'"
+      :fill="
       topicsToWords[selectedTopic?.id]
         ? topicsToWords[selectedTopic?.id].find(
             (wordInTopic) => wordInTopic.word === props.text
@@ -15,10 +14,12 @@
           : 'black'
         : 'black'
     "
-    @click="wordStore.updateSelectedWord(text!)"
-  >
-    {{ text }}
-  </text>
+      @click="wordStore.updateSelectedWord(text!)"
+    >
+      {{ text }}
+    </text>
+    <WordScarfPlot v-if="textWidth > 0" :width="textWidth" :word="text!" />
+  </g>
   <rect
     v-if="text === wordStore.selectedWord"
     :transform="`translate(${-textWidth / 2} ${-textHeight * 0.75})`"
@@ -38,6 +39,7 @@
   import { storeToRefs } from 'pinia'
   import { useGlobalWordStore } from '@/stores/globalWordStore'
   import { useTopicStore } from '@/stores/topicStore'
+  import WordScarfPlot from './WordScarfPlot.vue'
 
   const globalWordStore = useGlobalWordStore()
   const { topicsToWords } = storeToRefs(globalWordStore)

@@ -60,7 +60,7 @@
       ])
       .words(words)
       .text((d) => d.word)
-      .padding(1)
+      .padding(5)
       .rotate(() => 0)
       .spiral('rectangular')
       .fontSize((d) => wordSizeScale(+d.count))

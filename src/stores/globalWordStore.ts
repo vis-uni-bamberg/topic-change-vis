@@ -6,8 +6,11 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
   state: () => {
     return {
       allWords: [] as MyWord[],
-      topicsToWords: { '': [] } as { [key: string]: MyWord[] },
+      topicsToWords: {} as { [key: string]: MyWord[] },
       maxPeriodWordCount: 0,
+      wordsToHighestTopicPerPeriod: {} as {
+        [key: string]: { [period: string]: { topic: string; count: number } }
+      },
     }
   },
   actions: {
@@ -63,6 +66,35 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
           }
         })
       this.maxPeriodWordCount = max
+
+      this.getHighestTopicPerPeriodPerWord(payload)
+    },
+
+    getHighestTopicPerPeriodPerWord(payload: Topic[]): void {
+      const result = {} as {
+        [key: string]: { [period: string]: { topic: string; count: number } }
+      }
+      payload.forEach((topic) => {
+        for (let period = 0; period < payload[0].periods.length; period++) {
+          topic.periods[period].words.forEach((word: MyWord) => {
+            if (!result[word.word]) {
+              result[word.word] = {}
+            }
+            if (!result[word.word][period.toString()]) {
+              result[word.word][period.toString()] = {
+                topic: topic.id,
+                count: word.count,
+              }
+            } else if (
+              word.count > result[word.word][period.toString()].count
+            ) {
+              result[word.word][period.toString()].topic = topic.id
+              result[word.word][period.toString()].count = word.count
+            }
+          })
+        }
+      })
+      this.wordsToHighestTopicPerPeriod = result
     },
   },
   getters: {},
