@@ -37,6 +37,6 @@
     if (highestTopicForWordForPeriod) {
       return datasetStore.colorScale(highestTopicForWordForPeriod.topic)
     }
-    return 'black;'
+    return 'none'
   }
 </script>
