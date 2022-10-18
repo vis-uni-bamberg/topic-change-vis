@@ -6,7 +6,7 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
   state: () => {
     return {
       allWords: [] as MyWord[],
-      words: { '': [] } as { [key: string]: MyWord[] },
+      topicsToWords: { '': [] } as { [key: string]: MyWord[] },
       maxPeriodWordCount: 0,
     }
   },
@@ -30,7 +30,7 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
           return words
         }, [])
 
-      this.words = payload.reduce(
+      this.topicsToWords = payload.reduce(
         (acc, topic) => ({
           ...acc,
           [topic.id]: topic.periods

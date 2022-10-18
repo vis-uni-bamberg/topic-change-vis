@@ -7,8 +7,8 @@
     :font-size="size"
     :text-anchor="'middle'"
     :fill="
-      words[selectedTopic?.id]
-        ? words[selectedTopic?.id].find(
+      topicsToWords[selectedTopic?.id]
+        ? topicsToWords[selectedTopic?.id].find(
             (wordInTopic) => wordInTopic.word === props.text
           )?.count! > 200
           ? topicColor
@@ -40,7 +40,7 @@
   import { useTopicStore } from '@/stores/topicStore'
 
   const globalWordStore = useGlobalWordStore()
-  const { words } = storeToRefs(globalWordStore)
+  const { topicsToWords } = storeToRefs(globalWordStore)
 
   const topicStore = useTopicStore()
   const { selectedTopic, topicColor } = storeToRefs(topicStore)
