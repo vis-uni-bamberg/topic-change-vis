@@ -33,7 +33,6 @@
   const { selectedWord } = storeToRefs(wordStore)
 
   const maxPeriodWordCount = useGlobalWordStore().maxPeriodWordCount
-  console.log(maxPeriodWordCount)
 
   defineProps<{
     topic: Topic
