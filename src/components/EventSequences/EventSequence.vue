@@ -1,6 +1,9 @@
 <template>
   <div>
-    <svg :viewBox="`0 0 ${width} ${height}`">
+    <svg
+      :viewBox="`0 0 ${width} ${height}`"
+      @click="topicStore.updateSelectedTopic(topic)"
+    >
       <EventSequenceAxis
         :top="margin.top"
         :bottom="height - margin.bottom"
@@ -42,6 +45,7 @@
       </g>
     </svg>
     <WordFrequencyChart :color="color" :topic="topic" :x-scale="xScale" />
+    <TopicSimilarityMatrix :topic="topic" />
   </div>
 </template>
 
@@ -54,6 +58,10 @@
   import { toRefs } from 'vue'
   import EventSequenceAxis from './EventSequenceAxis.vue'
   import WordFrequencyChart from './WordFrequencyChart.vue'
+  import TopicSimilarityMatrix from './TopicSimilarityMatrix.vue'
+  import { useTopicStore } from '@/stores/topicStore'
+
+  const topicStore = useTopicStore()
 
   const props = defineProps<{
     topic: Topic
