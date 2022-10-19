@@ -68,7 +68,8 @@ export const useDatasetStore = defineStore('datasetStore', {
       const globalWordStore = useGlobalWordStore()
       globalWordStore.loadData(this.topics)
 
-      useSimilarityStore().loadSimilarities()
+      useSimilarityStore().loadSimilaritiesBetweenTopics()
+      useSimilarityStore().loadSimilaritiesWithinTopics()
     },
   },
   getters: {
