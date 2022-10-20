@@ -10,7 +10,13 @@
         :left="margin.left"
       />
       <g :transform="`translate(${[margin.left, margin.top]})`">
-        <path :d="connectionLine!" stroke="grey" stroke-width="0.25" />
+        <path :d="bottomLine!" stroke="black" stroke-width="0.5" />
+        <TopicSizeAreaChart
+          :color="color"
+          :x-scale="xScale"
+          :periods="topic.periods"
+          :y-max="yRange"
+        />
         <g>
           <EventSequenceVariableLine
             :events="topic.periods"
@@ -60,6 +66,7 @@
   import WordFrequencyChart from './WordFrequencyChart.vue'
   import TopicSimilarityMatrix from './TopicSimilarityMatrix.vue'
   import { useTopicStore } from '@/stores/topicStore'
+  import TopicSizeAreaChart from './TopicSizeAreaChart.vue'
 
   const topicStore = useTopicStore()
 
@@ -89,8 +96,8 @@
 
   const yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])
 
-  const connectionLine = d3.line()([
-    [xScale.range()[0], yRange / 2],
-    [xScale.range()[1], yRange / 2],
+  const bottomLine = d3.line()([
+    [xScale.range()[0], yRange],
+    [xScale.range()[1], yRange],
   ])
 </script>
