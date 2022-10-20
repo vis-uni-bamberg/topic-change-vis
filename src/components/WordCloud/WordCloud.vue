@@ -27,7 +27,7 @@
   import { storeToRefs } from 'pinia'
   import WordElement from './WordElement.vue'
   import { MyWord } from '@/models/Word'
-  import { ref, watchEffect } from 'vue'
+  import { ref } from 'vue'
 
   const globalWordStore = useGlobalWordStore()
   const { allWords } = storeToRefs(globalWordStore)
