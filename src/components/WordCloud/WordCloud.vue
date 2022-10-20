@@ -28,6 +28,7 @@
   import WordElement from './WordElement.vue'
   import { MyWord } from '@/models/Word'
   import { ref } from 'vue'
+  import { myLayout } from '@/helper/wordCloud'
 
   const globalWordStore = useGlobalWordStore()
   const { allWords } = storeToRefs(globalWordStore)
@@ -58,7 +59,8 @@
       .text((d) => d.word)
       .padding(5)
       .rotate(() => 0)
-      .spiral('rectangular')
+      .random(() => 1)
+      .spiral(myLayout)
       .fontSize((d) => wordSizeScale(+d.count))
 
     return layout.start()
