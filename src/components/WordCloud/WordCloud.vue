@@ -48,10 +48,6 @@
 
   let wordCloud = ref(buildWordCloud(allWords.value))
 
-  watchEffect(() => {
-    wordCloud.value = buildWordCloud(allWords.value)
-  })
-
   function buildWordCloud(words: MyWord[]) {
     const layout = cloud<MyWord>()
       .size([
