@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ (similarity / periodCount).toPrecision(2) }}
+    {{ similarity }}
   </div>
 </template>
 <script setup lang="ts">
@@ -20,13 +20,14 @@
     otherTopic: Topic
   }>()
 
-  const similarity = Object.entries(similaritiesBetweenTopics.value)
-    .map((period) => {
-      return period[1][props.topic.id.slice(1)].find(
-        (similarity) => similarity.otherTopicId === props.otherTopic.id.slice(1)
-      )
-    })
-    .reduce((a, b) => a + (b ? b.similarity : 0), 0)
-
-  console.log(similarity)
+  const similarity = (
+    Object.entries(similaritiesBetweenTopics.value)
+      .map((period) => {
+        return period[1][props.topic.id.slice(1)].find(
+          (similarity) =>
+            similarity.otherTopicId === props.otherTopic.id.slice(1)
+        )
+      })
+      .reduce((a, b) => a + (b ? b.similarity : 0), 0) / periodCount.value
+  ).toPrecision(2)
 </script>
