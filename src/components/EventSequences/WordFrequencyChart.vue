@@ -23,18 +23,25 @@
   </div>
 </template>
 <script setup lang="ts">
+  import { AbsoluteRelativeSettings } from '@/models/AbsoluteRelativeSettings'
   import { Topic } from '@/models/Topic'
   import { useGlobalWordStore } from '@/stores/globalWordStore'
+  import { useSettingsStore } from '@/stores/settingsStore'
   import { useWordStore } from '@/stores/wordStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
+  import { ref, watchEffect } from 'vue'
 
   const wordStore = useWordStore()
   const { selectedWord } = storeToRefs(wordStore)
 
-  const maxPeriodWordCount = useGlobalWordStore().maxPeriodWordCount
+  const { maxPeriodWordCount, maxPeriodWordCountPerTopic } = storeToRefs(
+    useGlobalWordStore()
+  )
 
-  defineProps<{
+  const { metricsSettings } = storeToRefs(useSettingsStore())
+
+  const props = defineProps<{
     topic: Topic
     xScale: d3.ScaleLinear<number, number>
     color: string
@@ -51,8 +58,21 @@
   const xRange = width - margin.left - margin.right
   const yRange = height - margin.top - margin.bottom
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, maxPeriodWordCount])
-    .range([yRange, 0])
+  let yScale = ref(d3.scaleLinear().domain([0, 0]).range([yRange, 0]))
+  watchEffect(() => {
+    switch (metricsSettings.value) {
+      case AbsoluteRelativeSettings.ABSOLUTE:
+        yScale.value = d3
+          .scaleLinear()
+          .domain([0, maxPeriodWordCount.value])
+          .range([yRange, 0])
+        break
+      case AbsoluteRelativeSettings.RELATIVE_TOPIC:
+        yScale.value = d3
+          .scaleLinear()
+          .domain([0, maxPeriodWordCountPerTopic.value[props.topic.id]])
+          .range([yRange, 0])
+        break
+    }
+  })
 </script>
