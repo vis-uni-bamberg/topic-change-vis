@@ -15,6 +15,7 @@
         :y="word.y"
         :size="word.size"
         :text="word.word"
+        :word-size-scale="wordSizeScale"
       />
     </g>
   </svg>
@@ -27,7 +28,6 @@
   import { storeToRefs } from 'pinia'
   import WordElement from './WordElement.vue'
   import { MyWord } from '@/models/Word'
-  import { ref } from 'vue'
   import { myLayout } from '@/helper/wordCloud'
 
   const globalWordStore = useGlobalWordStore()
@@ -43,6 +43,7 @@
   const height = 650
 
   const wordSizeScale = d3
+    .scaleLinear()
     .domain([
       0,
       Math.max(...allWords.value.slice(0, 60).map((word) => word.count)),
