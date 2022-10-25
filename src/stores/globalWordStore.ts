@@ -17,24 +17,15 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
   },
   actions: {
     loadData(payload: Topic[]): void {
-      this.allWords = payload
-        .map((topic) => topic.periods.map((period) => period.words))
-        .flat()
-        .flat()
-        .filter((word) => word.count > 100)
-        .reduce((words: MyWord[], otherWord: MyWord) => {
-          const word = words.find((word) => word.word === otherWord.word)
-          if (word) {
-            word.count += otherWord.count
-          } else {
-            words.push({
-              word: otherWord.word,
-              count: otherWord.count,
-            })
-          }
-          return words
-        }, [])
+      this.getTopicsToWords(payload)
+      this.getAllWords()
+      this.getMaxPeriodWordCount(payload)
+      this.getMaxPeriodWordCountPerTopic(payload)
+      this.getMaxPeriodTopicSize(payload)
+      this.getHighestTopicPerPeriodPerWord(payload)
+    },
 
+    getTopicsToWords(payload: Topic[]): void {
       this.topicsToWords = payload.reduce(
         (acc, topic) => ({
           ...acc,
@@ -56,11 +47,24 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
         }),
         {}
       )
+    },
 
-      this.getMaxPeriodWordCount(payload)
-      this.getMaxPeriodWordCountPerTopic(payload)
-      this.getMaxPeriodTopicSize(payload)
-      this.getHighestTopicPerPeriodPerWord(payload)
+    getAllWords(): void {
+      this.allWords = Object.values(this.topicsToWords)
+        .flat()
+        .reduce((words: MyWord[], otherWord: MyWord) => {
+          const word = words.find((word) => word.word === otherWord.word)
+          if (word) {
+            word.count += otherWord.count
+          } else {
+            words.push({
+              word: otherWord.word,
+              count: otherWord.count,
+            })
+          }
+          return words
+        }, [])
+        .sort((a, b) => b.count - a.count)
     },
 
     getMaxPeriodWordCount(payload: Topic[]): void {

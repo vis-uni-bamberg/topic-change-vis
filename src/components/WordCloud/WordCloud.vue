@@ -43,11 +43,13 @@
   const height = 650
 
   const wordSizeScale = d3
-    .scaleSqrt()
-    .domain([0, Math.max(...allWords.value.map((word) => word.count))])
+    .domain([
+      0,
+      Math.max(...allWords.value.slice(0, 60).map((word) => word.count)),
+    ])
     .range([10, 80])
 
-  let wordCloud = ref(buildWordCloud(allWords.value))
+  let wordCloud = buildWordCloud(allWords.value.slice(0, 60))
 
   function buildWordCloud(words: MyWord[]) {
     const layout = cloud<MyWord>()
