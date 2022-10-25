@@ -26,7 +26,7 @@
       <BCol>
         <BListGroup>
           <BListGroupItem v-for="topic in datasetStore.topics" :key="topic.id">
-            <div :class="selectedTopic.id === topic.id ? 'bg-slate-300' : ''">
+            <div :class="selectedTopic?.id === topic.id ? 'bg-slate-300' : ''">
               {{ topic.id }}
               <EventSequence
                 :topic="topic"
