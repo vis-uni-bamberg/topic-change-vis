@@ -5,15 +5,12 @@
 </template>
 <script setup lang="ts">
   import { Topic } from '@/models/Topic'
-  import { useDatasetStore } from '@/stores/datasetStore'
   import { useSimilarityStore } from '@/stores/similarityStore'
   import { storeToRefs } from 'pinia'
+  import * as d3 from 'd3'
 
   const similarityStore = useSimilarityStore()
   const { similaritiesBetweenTopics } = storeToRefs(similarityStore)
-
-  const datasetStore = useDatasetStore()
-  const { periodCount } = storeToRefs(datasetStore)
 
   const props = defineProps<{
     topic: Topic
@@ -21,13 +18,18 @@
   }>()
 
   const similarity = (
-    Object.entries(similaritiesBetweenTopics.value)
-      .map((period) => {
-        return period[1][props.topic.id.slice(1)].find(
-          (similarity) =>
-            similarity.otherTopicId === props.otherTopic.id.slice(1)
-        )
-      })
-      .reduce((a, b) => a + (b ? b.similarity : 0), 0) / periodCount.value
+    d3.quantile(
+      Object.entries(similaritiesBetweenTopics.value)
+        .map((period) => {
+          return period[1][props.topic.id.slice(1)].find(
+            (similarity) =>
+              similarity.otherTopicId === props.otherTopic.id.slice(1)
+          )
+        })
+        .sort((a, b) => (b ? b.similarity : 0) - (a ? a.similarity : 0))
+        .filter((entry) => entry)
+        .map((entry) => entry?.similarity),
+      0.95
+    ) ?? -1
   ).toPrecision(2)
 </script>
