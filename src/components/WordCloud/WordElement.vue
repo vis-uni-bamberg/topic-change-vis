@@ -3,17 +3,9 @@
     <text
       :id="`text-element-${text}`"
       class="cursor-pointer"
-      :font-size="size"
+      :font-size="fontSize"
       :text-anchor="'middle'"
-      :fill="
-      topicsToWords[selectedTopic?.id]
-        ? topicsToWords[selectedTopic?.id].find(
-            (wordInTopic) => wordInTopic.word === props.text
-          )?.count! > 200
-          ? topicColor
-          : 'black'
-        : 'black'
-    "
+      :fill="textColor"
       @click="wordStore.updateSelectedWord(text!)"
     >
       {{ text }}
@@ -34,7 +26,7 @@
 
 <script lang="ts" setup>
   import { useWordStore } from '@/stores/wordStore'
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, watchEffect } from 'vue'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
   import { useGlobalWordStore } from '@/stores/globalWordStore'
@@ -54,10 +46,34 @@
     y: number | undefined
     size: number | undefined
     text: string | undefined
+    wordSizeScale: d3.ScaleLinear<number, number, never>
   }>()
 
   let textWidth = ref(0)
   let textHeight = ref(0)
+
+  let textColor = ref('black')
+  let fontSize = ref(props.size)
+
+  watchEffect(() => {
+    if (selectedTopic.value) {
+      textColor.value =
+        (topicsToWords.value[selectedTopic.value.id]?.find(
+          (wordInTopic) => wordInTopic.word === props.text
+        )?.count ?? 0) > 500
+          ? topicColor.value
+          : 'black'
+
+      const count = topicsToWords.value[selectedTopic.value.id]?.find(
+        (wordInTopic) => wordInTopic.word === props.text
+      )?.count
+
+      fontSize.value = count ? props.wordSizeScale(count) : 0
+    } else {
+      fontSize.value = props.size
+      textColor.value = topicColor.value
+    }
+  })
 
   onMounted(() => {
     textWidth.value =
