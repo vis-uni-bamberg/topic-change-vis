@@ -151,8 +151,6 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
           )
         })
       })
-
-      console.log(this.topicToPeriodToSize)
     },
   },
   getters: {},
