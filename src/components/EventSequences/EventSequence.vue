@@ -10,7 +10,7 @@
         :left="margin.left"
       />
       <g :transform="`translate(${[margin.left, margin.top]})`">
-        <path :d="bottomLine!" stroke="black" stroke-width="0.5" />
+        <PeriodTimeline :y="yRange" :width="xRange" />
         <TopicSizeAreaChart
           :color="color"
           :x-scale="xScale"
@@ -67,6 +67,7 @@
   import TopicSimilarityMatrix from './TopicSimilarityMatrix.vue'
   import { useTopicStore } from '@/stores/topicStore'
   import TopicSizeAreaChart from './TopicSizeAreaChart.vue'
+  import PeriodTimeline from '../PeriodTimeline.vue'
 
   const topicStore = useTopicStore()
 
