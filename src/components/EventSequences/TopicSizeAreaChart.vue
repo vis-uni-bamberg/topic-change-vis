@@ -18,7 +18,7 @@
 
   const yScale = d3
     .scaleLinear()
-    .domain([0, useGlobalWordStore().maxPeriodTopicSize])
+    .domain([0, useGlobalWordStore().maxGlobalTopicSizeInSinglePeriod])
     .range([props.yMax, 0])
 
   const areaGenerator = d3

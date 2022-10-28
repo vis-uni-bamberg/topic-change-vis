@@ -35,9 +35,10 @@
   const wordStore = useWordStore()
   const { selectedWord } = storeToRefs(wordStore)
 
-  const { maxPeriodWordCount, maxPeriodWordCountPerTopic } = storeToRefs(
-    useGlobalWordStore()
-  )
+  const {
+    maxGlobalWordCountInSinglePeriod,
+    maxWordCountPerTopicInSinglePeriod,
+  } = storeToRefs(useGlobalWordStore())
 
   const { metricsSettings } = storeToRefs(useSettingsStore())
 
@@ -64,13 +65,13 @@
       case AbsoluteRelativeSettings.ABSOLUTE:
         yScale.value = d3
           .scaleLinear()
-          .domain([0, maxPeriodWordCount.value])
+          .domain([0, maxGlobalWordCountInSinglePeriod.value])
           .range([yRange, 0])
         break
       case AbsoluteRelativeSettings.RELATIVE_TOPIC:
         yScale.value = d3
           .scaleLinear()
-          .domain([0, maxPeriodWordCountPerTopic.value[props.topic.id]])
+          .domain([0, maxWordCountPerTopicInSinglePeriod.value[props.topic.id]])
           .range([yRange, 0])
         break
     }
