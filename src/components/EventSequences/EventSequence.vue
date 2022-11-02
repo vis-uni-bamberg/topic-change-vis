@@ -96,9 +96,4 @@
     .range([0, xRange])
 
   const yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])
-
-  const bottomLine = d3.line()([
-    [xScale.range()[0], yRange],
-    [xScale.range()[1], yRange],
-  ])
 </script>
