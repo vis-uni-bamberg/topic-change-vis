@@ -10,6 +10,7 @@
   import { storeToRefs } from 'pinia'
   import { useSimilarityStore } from './stores/similarityStore'
   import AbsoluteRelativeSelector from './components/AbsoluteRelativeSelector.vue'
+  import EventDetails from './components/EventDetails/EventDetails.vue'
 
   const similarityStore = useSimilarityStore()
   const datasetStore = useDatasetStore()
@@ -47,6 +48,9 @@
         >
           <SimilarityMatrix />
         </BRow>
+      </BCol>
+      <BCol>
+        <EventDetails />
       </BCol>
     </BRow>
   </BContainer>

@@ -4,18 +4,19 @@ import { defineStore } from 'pinia'
 export const useEventStore = defineStore('eventStore', {
   state: () => {
     return {
-      selected: null as TopicPeriod | null,
-      hovered: null as TopicPeriod | null,
+      selectedEvent: null as TopicPeriod | null,
+      hoveredEvent: null as TopicPeriod | null,
     }
   },
   actions: {
     setSelected(payload: TopicPeriod): void {
-      this.selected === payload
-        ? (this.selected = null)
-        : (this.selected = payload)
+      this.selectedEvent === payload
+        ? (this.selectedEvent = null)
+        : (this.selectedEvent = payload)
+      console.log(this.selectedEvent)
     },
     setHovered(payload: TopicPeriod | null): void {
-      this.hovered = payload
+      this.hoveredEvent = payload
     },
   },
   getters: {},

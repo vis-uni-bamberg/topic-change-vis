@@ -6,7 +6,7 @@
           -size / 2
         }`"
         :fill="color"
-        :stroke-width="hovered?.id === data.id ? 2 : 1"
+        :stroke-width="hoveredEvent?.id === data.id ? 2 : 1"
         stroke="black"
         @mouseover="hoverEvent(data)"
         @mouseleave="hoverEvent(null)"
@@ -33,7 +33,7 @@
   import { line } from 'd3-shape'
 
   const eventStore = useEventStore()
-  const { hovered } = storeToRefs(eventStore)
+  const { hoveredEvent } = storeToRefs(eventStore)
 
   defineProps<{
     data: TopicPeriod
