@@ -48,7 +48,7 @@
       0,
       Math.max(...allWords.value.slice(0, 60).map((word) => word.count)),
     ])
-    .range([10, 80])
+    .range([5, 80])
 
   let wordCloud = buildWordCloud(allWords.value.slice(0, 60))
 
