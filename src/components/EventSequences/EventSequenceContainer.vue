@@ -14,7 +14,7 @@
       <EventSequence
         :topic="topic"
         :color="color"
-        :margin="margin"
+        :x-margins="margin"
         :x-range="xRange"
         :x-scale="xScale"
         :width="width"

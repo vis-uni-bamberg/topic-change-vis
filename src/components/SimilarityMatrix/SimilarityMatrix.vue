@@ -27,6 +27,7 @@
         </div>
         <div
           v-else-if="outerTopic.id !== innerTopic.id && outerIndex < innerIndex"
+          class="h-full w-full"
         >
           <SimilarityMatrixMetricCell
             :topic="innerTopic"

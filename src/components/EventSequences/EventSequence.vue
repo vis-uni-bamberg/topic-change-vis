@@ -4,7 +4,7 @@
     :viewBox="`0 0 ${width} ${height}`"
     @click="topicStore.updateSelectedTopic(topic)"
   >
-    <g :transform="`translate(${[margin.left, margin.top]})`">
+    <g :transform="`translate(${[xMargins.left, margin.top]})`">
       <PeriodTimeline :y="yRange" :width="xRange" />
       <TopicSizeAreaChart
         :color="color"
@@ -70,7 +70,7 @@
   const props = defineProps<{
     topic: Topic
     color: string
-    margin: { [direction: string]: number }
+    xMargins: { [direction: string]: number }
     xScale: d3.ScaleBand<string>
     xRange: number
     width: number
@@ -80,7 +80,7 @@
 
   const margin = {
     top: 1,
-    bottom: 10,
+    bottom: 12,
   }
   const width = 400
   const height = 50
