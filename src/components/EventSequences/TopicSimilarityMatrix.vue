@@ -14,9 +14,9 @@
               <rect
                 v-for="(periodColumn, indexColumn) in topic.periods"
                 :key="`${periodColumn.id}-similarity-column-rect`"
-                :x="xScale(indexColumn)"
+                :x="xScale(periodColumn.id)"
                 :y="yScale(index)"
-                :width="xScale(1)"
+                :width="xScale.bandwidth()"
                 :height="yScale(1)"
                 :fill="
                   similarityScale(
@@ -48,6 +48,7 @@
 
   const props = defineProps<{
     topic: Topic
+    xScale: d3.ScaleBand<string>
   }>()
 
   const margin = {
@@ -58,13 +59,7 @@
   }
   const width = 400
   const height = 150
-  const xRange = width - margin.left - margin.right
   const yRange = height - margin.top - margin.bottom
-
-  const xScale = d3
-    .scaleLinear()
-    .domain([0, props.topic.periods.length])
-    .range([0, xRange])
 
   const yScale = d3
     .scaleLinear()

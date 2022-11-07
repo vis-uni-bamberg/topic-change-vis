@@ -4,11 +4,6 @@
       :viewBox="`0 0 ${width} ${height}`"
       @click="topicStore.updateSelectedTopic(topic)"
     >
-      <EventSequenceAxis
-        :top="margin.top"
-        :bottom="height - margin.bottom"
-        :left="margin.left"
-      />
       <g :transform="`translate(${[margin.left, margin.top]})`">
         <PeriodTimeline :y="yRange" :width="xRange" />
         <TopicSizeAreaChart
@@ -42,16 +37,21 @@
             )"
             :key="period.id"
             :data="period"
-            :x="xScale(topic.periods.indexOf(period))"
+            :x="(xScale(period.id) ?? 0) + xScale.step() / 2"
             :y="yScale(period.similarity)"
             :size="glyphSize"
             :color="color"
           />
         </g>
+        <WordFrequencyChart
+          :color="color"
+          :topic="topic"
+          :x-scale="xScale"
+          :y-scale="yScale"
+        />
       </g>
     </svg>
-    <WordFrequencyChart :color="color" :topic="topic" :x-scale="xScale" />
-    <TopicSimilarityMatrix :topic="topic" />
+    <TopicSimilarityMatrix :x-scale="xScale" :topic="topic" />
   </div>
 </template>
 
@@ -62,7 +62,6 @@
   import { config } from '@/config'
   import { Topic } from '@/models/Topic'
   import { toRefs } from 'vue'
-  import EventSequenceAxis from './EventSequenceAxis.vue'
   import WordFrequencyChart from './WordFrequencyChart.vue'
   import TopicSimilarityMatrix from './TopicSimilarityMatrix.vue'
   import { useTopicStore } from '@/stores/topicStore'
@@ -81,7 +80,7 @@
   const margin = {
     top: 1,
     right: 5,
-    bottom: 1,
+    bottom: 12,
     left: 5,
   }
   const width = 400
@@ -91,8 +90,8 @@
   const glyphSize = config.eventGlyphSize
 
   const xScale = d3
-    .scaleLinear()
-    .domain([0, topic.value.periods.length - 1])
+    .scaleBand()
+    .domain(props.topic.periods.map((period) => period.id))
     .range([0, xRange])
 
   const yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])

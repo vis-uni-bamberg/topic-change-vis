@@ -1,20 +1,23 @@
 <template>
-  <div v-if="selectedWord.length > 0">
-    <span>{{ selectedWord }}</span>
-    <svg :viewBox="`0 0 ${width} ${height}`">
-      <g :transform="`translate(${[margin.left, margin.top]})`">
-        <rect
-          v-for="(period, index) in topic.periods"
-          :key="period.id"
-          :x="xScale(period.id)"
-          :y="yScale(value(topic, period, index))"
-          :width="xScale.bandwidth()"
-          :height="yRange - yScale(value(topic, period, index))"
-          :fill="color"
-        />
-      </g>
-    </svg>
-  </div>
+  <g v-if="selectedWord.length > 0">
+    <g :transform="`translate(${xScale.step() / 2}, 0)`">
+      <rect
+        v-for="(period, index) in topic.periods"
+        :key="period.id"
+        :transform="`translate(${-width / 2}, ${-height / 2})`"
+        :x="xScale(period.id)"
+        :y="yScale(value(topic, period, index))"
+        :width="width"
+        :height="height"
+        :fill="color"
+      />
+      <path
+        :d="connectionLineGenerator(topic.periods) ?? ''"
+        :stroke="color"
+        fill="none"
+      />
+    </g>
+  </g>
 </template>
 <script setup lang="ts">
   import { Topic } from '@/models/Topic'
@@ -31,28 +34,13 @@
 
   const props = defineProps<{
     topic: Topic
-    xScale: d3.ScaleLinear<number, number>
+    xScale: d3.ScaleBand<string>
+    yScale: d3.ScaleLinear<number, number>
     color: string
   }>()
 
-  const margin = {
-    top: 1,
-    right: 5,
-    bottom: 1,
-    left: 5,
-  }
-  const width = 400
-  const height = 50
-  const xRange = width - margin.left - margin.right
-  const yRange = height - margin.top - margin.bottom
-
-  const xScale = d3
-    .scaleBand()
-    .domain(props.topic.periods.map((period) => period.id))
-    .range([0, xRange])
-    .padding(0.0)
-
-  let yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])
+  const width = 3
+  const height = 3
 
   const value = (topic: Topic, period: TopicPeriod, index: number) => {
     if (topicToPeriodToSize.value[topic.id][index] === 0) return 0
@@ -61,4 +49,12 @@
         0) / topicToPeriodToSize.value[topic.id][index]
     )
   }
+
+  const connectionLineGenerator = d3
+    .line<TopicPeriod>()
+    .x((d: TopicPeriod) => props.xScale(d.id) ?? 0)
+    .y((d: TopicPeriod, i: number): number =>
+      props.yScale(value(props.topic, d, i))
+    )
+    .curve(d3.curveCatmullRom.alpha(0.5))
 </script>
