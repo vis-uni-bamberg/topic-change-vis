@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full">
+  <div class="flex flex-col h-full w-full">
     <div class="flex">
       <div class="w-1/12"></div>
       <div v-for="topic in topics" :key="topic.id" class="w-1/12">
@@ -9,15 +9,15 @@
     <div
       v-for="(outerTopic, outerIndex) in topics"
       :key="outerTopic.id"
-      class="flex"
+      class="flex h-1/6"
     >
-      <div class="pr-2 w-1/12">
+      <div class="pr-2 w-1/12 flex items-center justify-center">
         {{ outerTopic.id }}
       </div>
       <div
         v-for="(innerTopic, innerIndex) in topics"
         :key="innerTopic.id"
-        class="w-1/12 border-1 border-slate-900"
+        class="w-1/12 border-1 border-slate-900 flex items-center justify-center"
       >
         <div v-if="outerTopic.id !== innerTopic.id && outerIndex > innerIndex">
           <SimilarityMatrixPlotCell
