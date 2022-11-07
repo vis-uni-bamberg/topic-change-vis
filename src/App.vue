@@ -9,7 +9,6 @@
   import { useTopicStore } from './stores/topicStore'
   import { storeToRefs } from 'pinia'
   import { useSimilarityStore } from './stores/similarityStore'
-  import AbsoluteRelativeSelector from './components/AbsoluteRelativeSelector.vue'
 
   const similarityStore = useSimilarityStore()
   const datasetStore = useDatasetStore()
@@ -20,7 +19,6 @@
 </script>
 
 <template>
-  <AbsoluteRelativeSelector />
   <BContainer>
     <BRow>
       <BCol>

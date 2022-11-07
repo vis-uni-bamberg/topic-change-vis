@@ -6,16 +6,10 @@
         <rect
           v-for="(period, index) in topic.periods"
           :key="period.id"
-          :x="xScale(index)"
-          :y="yScale(period.words.find((word) => word.word === selectedWord)?.count!)"
-          :width="xRange / topic.periods.length"
-          :height="
-            yRange -
-            yScale(
-              period.words.find((word) => word.word === selectedWord)?.count ??
-                0
-            )
-          "
+          :x="xScale(period.id)"
+          :y="yScale(value(topic, period, index))"
+          :width="xScale.bandwidth()"
+          :height="yRange - yScale(value(topic, period, index))"
           :fill="color"
         />
       </g>
@@ -23,24 +17,17 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { AbsoluteRelativeSettings } from '@/models/AbsoluteRelativeSettings'
   import { Topic } from '@/models/Topic'
+  import { TopicPeriod } from '@/models/TopicPeriod'
   import { useGlobalWordStore } from '@/stores/globalWordStore'
-  import { useSettingsStore } from '@/stores/settingsStore'
   import { useWordStore } from '@/stores/wordStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
-  import { ref, watchEffect } from 'vue'
 
   const wordStore = useWordStore()
   const { selectedWord } = storeToRefs(wordStore)
 
-  const {
-    maxGlobalWordCountInSinglePeriod,
-    maxWordCountPerTopicInSinglePeriod,
-  } = storeToRefs(useGlobalWordStore())
-
-  const { metricsSettings } = storeToRefs(useSettingsStore())
+  const { topicToPeriodToSize } = storeToRefs(useGlobalWordStore())
 
   const props = defineProps<{
     topic: Topic
@@ -55,25 +42,23 @@
     left: 5,
   }
   const width = 400
-  const height = 20
+  const height = 50
   const xRange = width - margin.left - margin.right
   const yRange = height - margin.top - margin.bottom
 
-  let yScale = ref(d3.scaleLinear().domain([0, 0]).range([yRange, 0]))
-  watchEffect(() => {
-    switch (metricsSettings.value) {
-      case AbsoluteRelativeSettings.ABSOLUTE:
-        yScale.value = d3
-          .scaleLinear()
-          .domain([0, maxGlobalWordCountInSinglePeriod.value])
-          .range([yRange, 0])
-        break
-      case AbsoluteRelativeSettings.RELATIVE_TOPIC:
-        yScale.value = d3
-          .scaleLinear()
-          .domain([0, maxWordCountPerTopicInSinglePeriod.value[props.topic.id]])
-          .range([yRange, 0])
-        break
-    }
-  })
+  const xScale = d3
+    .scaleBand()
+    .domain(props.topic.periods.map((period) => period.id))
+    .range([0, xRange])
+    .padding(0.0)
+
+  let yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])
+
+  const value = (topic: Topic, period: TopicPeriod, index: number) => {
+    if (topicToPeriodToSize.value[topic.id][index] === 0) return 0
+    return (
+      (period.words.find((word) => word.word === selectedWord.value)?.count ??
+        0) / topicToPeriodToSize.value[topic.id][index]
+    )
+  }
 </script>
