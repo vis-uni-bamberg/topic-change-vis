@@ -12,17 +12,18 @@
 
   const props = defineProps<{
     events: TopicPeriod[]
-    xScale: d3.ScaleLinear<number, number>
+    xScale: d3.ScaleBand<string>
     yScale: d3.ScaleLinear<number, number>
     color: string
     variable: keyof TopicPeriod
-    glyphSize: number
   }>()
 
   const variableLineGenerator = (accessor: keyof TopicPeriod) =>
     d3
       .line<TopicPeriod>()
-      .x((d: TopicPeriod, i: number) => props.xScale(i))
+      .x(
+        (d: TopicPeriod) => (props.xScale(d.id) ?? 0) + props.xScale.step() / 2
+      )
       .y((d: TopicPeriod): number => props.yScale(d[accessor] as number) ?? 0)
       .curve(d3.curveCatmullRom.alpha(0.5))
 </script>

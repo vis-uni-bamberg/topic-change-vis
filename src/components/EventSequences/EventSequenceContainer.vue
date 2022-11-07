@@ -1,12 +1,16 @@
 <template>
-  <div :class="selectedTopic?.id === topic.id ? 'bg-slate-300' : 'flex'">
-    <div>
+  <div
+    :class="
+      selectedTopic?.id === topic.id ? 'bg-slate-300' : 'flex' + ' w-full'
+    "
+  >
+    <div class="w-1/5">
       {{ topic.id }}
       <b-button v-b-toggle="`matrix-collapse-${topic.id}`">
         <span class="when-open">-</span><span class="when-closed">+</span>
       </b-button>
     </div>
-    <div>
+    <div class="w-4/5">
       <EventSequence
         :topic="topic"
         :color="color"
@@ -15,8 +19,7 @@
         :x-scale="xScale"
         :width="width"
       />
-      <WordFrequencyChart :color="color" :topic="topic" :x-scale="xScale" />
-      <TopicSimilarityMatrix :topic="topic" />
+      <TopicSimilarityMatrix :x-scale="xScale" :topic="topic" />
     </div>
   </div>
 </template>
@@ -27,7 +30,6 @@
   import { useTopicStore } from '@/stores/topicStore'
   import { storeToRefs } from 'pinia'
   import EventSequence from '@/components/EventSequences/EventSequence.vue'
-  import WordFrequencyChart from './WordFrequencyChart.vue'
   import TopicSimilarityMatrix from './TopicSimilarityMatrix.vue'
   import { toRefs } from 'vue'
 
@@ -40,9 +42,7 @@
   }>()
 
   const margin = {
-    top: 1,
     right: 5,
-    bottom: 1,
     left: 5,
   }
 
@@ -52,8 +52,8 @@
   const { topic } = toRefs(props)
 
   const xScale = d3
-    .scaleLinear()
-    .domain([0, topic.value.periods.length - 1])
+    .scaleBand()
+    .domain(props.topic.periods.map((period) => period.id))
     .range([0, xRange])
 </script>
 

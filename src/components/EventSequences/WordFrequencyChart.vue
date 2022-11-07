@@ -1,79 +1,60 @@
 <template>
-  <div v-if="selectedWord.length > 0">
-    <span>{{ selectedWord }}</span>
-    <svg :viewBox="`0 0 ${width} ${height}`">
-      <g :transform="`translate(${[margin.left, margin.top]})`">
-        <rect
-          v-for="(period, index) in topic.periods"
-          :key="period.id"
-          :x="xScale(index)"
-          :y="yScale(period.words.find((word) => word.word === selectedWord)?.count!)"
-          :width="xRange / topic.periods.length"
-          :height="
-            yRange -
-            yScale(
-              period.words.find((word) => word.word === selectedWord)?.count ??
-                0
-            )
-          "
-          :fill="color"
-        />
-      </g>
-    </svg>
-  </div>
+  <g v-if="selectedWord.length > 0">
+    <g :transform="`translate(${xScale.step() / 2}, 0)`">
+      <rect
+        v-for="(period, index) in topic.periods"
+        :key="period.id"
+        :transform="`translate(${-width / 2}, ${-height / 2})`"
+        :x="xScale(period.id)"
+        :y="yScale(value(topic, period, index))"
+        :width="width"
+        :height="height"
+        :fill="color"
+      />
+      <path
+        :d="connectionLineGenerator(topic.periods) ?? ''"
+        :stroke="color"
+        fill="none"
+      />
+    </g>
+  </g>
 </template>
 <script setup lang="ts">
-  import { AbsoluteRelativeSettings } from '@/models/AbsoluteRelativeSettings'
   import { Topic } from '@/models/Topic'
+  import { TopicPeriod } from '@/models/TopicPeriod'
   import { useGlobalWordStore } from '@/stores/globalWordStore'
-  import { useSettingsStore } from '@/stores/settingsStore'
   import { useWordStore } from '@/stores/wordStore'
   import * as d3 from 'd3'
   import { storeToRefs } from 'pinia'
-  import { ref, watchEffect } from 'vue'
 
   const wordStore = useWordStore()
   const { selectedWord } = storeToRefs(wordStore)
 
-  const {
-    maxGlobalWordCountInSinglePeriod,
-    maxWordCountPerTopicInSinglePeriod,
-  } = storeToRefs(useGlobalWordStore())
-
-  const { metricsSettings } = storeToRefs(useSettingsStore())
+  const { topicToPeriodToSize } = storeToRefs(useGlobalWordStore())
 
   const props = defineProps<{
     topic: Topic
-    xScale: d3.ScaleLinear<number, number>
+    xScale: d3.ScaleBand<string>
+    yScale: d3.ScaleLinear<number, number>
     color: string
   }>()
 
-  const margin = {
-    top: 1,
-    right: 5,
-    bottom: 1,
-    left: 5,
-  }
-  const width = 400
-  const height = 20
-  const xRange = width - margin.left - margin.right
-  const yRange = height - margin.top - margin.bottom
+  const width = 3
+  const height = 3
 
-  let yScale = ref(d3.scaleLinear().domain([0, 0]).range([yRange, 0]))
-  watchEffect(() => {
-    switch (metricsSettings.value) {
-      case AbsoluteRelativeSettings.ABSOLUTE:
-        yScale.value = d3
-          .scaleLinear()
-          .domain([0, maxGlobalWordCountInSinglePeriod.value])
-          .range([yRange, 0])
-        break
-      case AbsoluteRelativeSettings.RELATIVE_TOPIC:
-        yScale.value = d3
-          .scaleLinear()
-          .domain([0, maxWordCountPerTopicInSinglePeriod.value[props.topic.id]])
-          .range([yRange, 0])
-        break
-    }
-  })
+  const value = (topic: Topic, period: TopicPeriod, index: number) => {
+    if (topicToPeriodToSize.value[topic.id][index] === 0) return 0
+    return (
+      (period.words.find((word) => word.word === selectedWord.value)?.count ??
+        0) / topicToPeriodToSize.value[topic.id][index]
+    )
+  }
+
+  const connectionLineGenerator = d3
+    .line<TopicPeriod>()
+    .x((d: TopicPeriod) => props.xScale(d.id) ?? 0)
+    .y((d: TopicPeriod, i: number): number =>
+      props.yScale(value(props.topic, d, i))
+    )
+    .curve(d3.curveCatmullRom.alpha(0.5))
 </script>

@@ -1,14 +1,9 @@
 <template>
   <svg
-    class="h-20"
+    class="w-full"
     :viewBox="`0 0 ${width} ${height}`"
     @click="topicStore.updateSelectedTopic(topic)"
   >
-    <EventSequenceAxis
-      :top="margin.top"
-      :bottom="height - margin.bottom"
-      :left="margin.left"
-    />
     <g :transform="`translate(${[margin.left, margin.top]})`">
       <PeriodTimeline :y="yRange" :width="xRange" />
       <TopicSizeAreaChart
@@ -42,12 +37,18 @@
           )"
           :key="period.id"
           :data="period"
-          :x="xScale(topic.periods.indexOf(period))"
+          :x="(xScale(period.id) ?? 0) + xScale.step() / 2"
           :y="yScale(period.similarity)"
           :size="glyphSize"
           :color="color"
         />
       </g>
+      <WordFrequencyChart
+        :color="color"
+        :topic="topic"
+        :x-scale="xScale"
+        :y-scale="yScale"
+      />
     </g>
   </svg>
 </template>
@@ -58,7 +59,8 @@
   import EventGlyph from './EventGlyph.vue'
   import { config } from '@/config'
   import { Topic } from '@/models/Topic'
-  import EventSequenceAxis from './EventSequenceAxis.vue'
+  import { toRefs } from 'vue'
+  import WordFrequencyChart from './WordFrequencyChart.vue'
   import { useTopicStore } from '@/stores/topicStore'
   import TopicSizeAreaChart from './TopicSizeAreaChart.vue'
   import PeriodTimeline from '../PeriodTimeline.vue'
@@ -69,13 +71,21 @@
     topic: Topic
     color: string
     margin: { [direction: string]: number }
-    xScale: d3.ScaleLinear<number, number, never>
+    xScale: d3.ScaleBand<string>
     xRange: number
     width: number
   }>()
 
+  const { topic } = toRefs(props)
+
+  const margin = {
+    top: 1,
+    bottom: 10,
+  }
+  const width = 400
   const height = 50
-  const yRange = height - props.margin.top - props.margin.bottom
+  const yRange = height - margin.top - margin.bottom
+
   const glyphSize = config.eventGlyphSize
 
   const yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])

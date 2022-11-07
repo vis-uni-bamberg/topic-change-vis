@@ -46,7 +46,7 @@
     y: number | undefined
     size: number | undefined
     text: string | undefined
-    wordSizeScale: d3.ScaleLinear<number, number, never>
+    wordSizeScale: d3.ScalePower<number, number, never>
   }>()
 
   let textWidth = ref(0)

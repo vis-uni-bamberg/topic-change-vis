@@ -11,7 +11,7 @@
 
   const props = defineProps<{
     periods: TopicPeriod[]
-    xScale: d3.ScaleLinear<number, number>
+    xScale: d3.ScaleBand<string>
     yMax: number
     color: string
   }>()
@@ -23,7 +23,7 @@
 
   const areaGenerator = d3
     .area<TopicPeriod>()
-    .x((d, index) => props.xScale(index))
+    .x((d: TopicPeriod) => (props.xScale(d.id) ?? 0) + props.xScale.step() / 2)
     .y1((d) => yScale(d.words.reduce((a, b) => a + b.count, 0)))
     .y0(yScale(0))
     .curve(d3.curveCatmullRom.alpha(0.5))

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    {{ similarity }}
+  <div :style="`background-color: ${color}`">
+    {{ similarity.toPrecision(2) }}
   </div>
 </template>
 <script setup lang="ts">
@@ -17,7 +17,7 @@
     otherTopic: Topic
   }>()
 
-  const similarity = (
+  const similarity =
     d3.quantile(
       Object.entries(similaritiesBetweenTopics.value)
         .map((period) => {
@@ -31,5 +31,6 @@
         .map((entry) => entry?.similarity),
       0.95
     ) ?? -1
-  ).toPrecision(2)
+
+  const color = d3.interpolateGreys(similarity)
 </script>

@@ -7,7 +7,6 @@
   import { useDatasetStore } from './stores/datasetStore'
   import { useGlobalWordStore } from './stores/globalWordStore'
   import { useSimilarityStore } from './stores/similarityStore'
-  // import AbsoluteRelativeSelector from './components/AbsoluteRelativeSelector.vue'
 
   const similarityStore = useSimilarityStore()
   const datasetStore = useDatasetStore()
@@ -21,8 +20,8 @@
       <AbsoluteRelativeSelector />
     </div> -->
     <div class="h-full">
-      <div class="grid grid-cols-4 h-full">
-        <div class="h-full col-span-2 grid grid-rows-12">
+      <div class="grid grid-cols-3 h-full">
+        <div class="h-full grid grid-rows-12">
           <div v-for="topic in datasetStore.topics" :key="topic.id">
             <EventSequenceContainer
               :topic="topic"
