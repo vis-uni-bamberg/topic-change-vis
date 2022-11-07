@@ -1,19 +1,23 @@
 <template>
-  <table class="table-fixed">
-    <tr>
-      <th></th>
-      <th v-for="topic in topics" :key="topic.id">
+  <div class="flex flex-col w-full">
+    <div class="flex">
+      <div class="w-1/12"></div>
+      <div v-for="topic in topics" :key="topic.id" class="w-1/12">
         {{ topic.id }}
-      </th>
-    </tr>
-    <tr v-for="(outerTopic, outerIndex) in topics" :key="outerTopic.id">
-      <th class="pr-2">
+      </div>
+    </div>
+    <div
+      v-for="(outerTopic, outerIndex) in topics"
+      :key="outerTopic.id"
+      class="flex"
+    >
+      <div class="pr-2 w-1/12">
         {{ outerTopic.id }}
-      </th>
-      <td
+      </div>
+      <div
         v-for="(innerTopic, innerIndex) in topics"
         :key="innerTopic.id"
-        class="border-1 border-slate-900"
+        class="w-1/12 border-1 border-slate-900"
       >
         <div v-if="outerTopic.id !== innerTopic.id && outerIndex > innerIndex">
           <SimilarityMatrixPlotCell
@@ -31,12 +35,12 @@
         </div>
         <div
           v-else
-          class="w-full h-5"
+          class="w-full h-full"
           :style="'background-color: ' + datasetStore.colorScale(outerTopic.id)"
         ></div>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>

@@ -1,10 +1,7 @@
 <template>
-  <div v-if="similaritiesWithinTopic[topic.id.slice(1)]">
-    <b-button v-b-toggle="`matrix-collapse-${topic.id}`">
-      <span class="when-open">-</span><span class="when-closed">+</span>
-    </b-button>
+  <div>
     <b-collapse :id="`matrix-collapse-${topic.id}`">
-      <div class="mt-2">
+      <div v-if="similaritiesWithinTopic[topic.id.slice(1)]" class="mt-2">
         <svg :viewBox="`0 0 ${width} ${height}`">
           <g :transform="`translate(${[margin.left, margin.top]})`">
             <g
@@ -76,12 +73,3 @@
     .domain([0, 1])
     .range(['white', datasetStore.colorScale(props.topic.id)])
 </script>
-
-<style scoped>
-  .collapsed > .when-open {
-    display: none;
-  }
-  button:not(.collapsed) > .when-closed {
-    display: none;
-  }
-</style>

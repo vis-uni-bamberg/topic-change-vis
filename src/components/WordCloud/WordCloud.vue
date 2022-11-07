@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="word-cloud"
+    class="h-[55rem] w-[50rem]"
     :viewBox="`0 0 ${wordCloud.size()[0]} ${wordCloud.size()[1]}`"
   >
     <g
@@ -40,7 +40,7 @@
     left: 5,
   }
   const width = 400
-  const height = 650
+  const height = 500
 
   const wordSizeScale = d3
     .scaleLinear()

@@ -1,55 +1,51 @@
 <script setup lang="ts">
   // This starter template is using Vue 3 <script setup> SFCs
   // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-  import EventSequence from './components/EventSequences/EventSequence.vue'
   import WordCloud from './components/WordCloud/WordCloud.vue'
   import SimilarityMatrix from './components/SimilarityMatrix/SimilarityMatrix.vue'
+  import EventSequenceContainer from './components/EventSequences/EventSequenceContainer.vue'
   import { useDatasetStore } from './stores/datasetStore'
   import { useGlobalWordStore } from './stores/globalWordStore'
-  import { useTopicStore } from './stores/topicStore'
-  import { storeToRefs } from 'pinia'
   import { useSimilarityStore } from './stores/similarityStore'
-  import AbsoluteRelativeSelector from './components/AbsoluteRelativeSelector.vue'
+  // import AbsoluteRelativeSelector from './components/AbsoluteRelativeSelector.vue'
 
   const similarityStore = useSimilarityStore()
   const datasetStore = useDatasetStore()
   const wordCloudStore = useGlobalWordStore()
-  const topicStore = useTopicStore()
-  const { selectedTopic } = storeToRefs(topicStore)
   datasetStore.loadData()
 </script>
 
 <template>
-  <AbsoluteRelativeSelector />
-  <BContainer>
-    <BRow>
-      <BCol>
-        <BListGroup>
-          <BListGroupItem v-for="topic in datasetStore.topics" :key="topic.id">
-            <div :class="selectedTopic?.id === topic.id ? 'bg-slate-300' : ''">
-              {{ topic.id }}
-              <EventSequence
-                :topic="topic"
-                :color="datasetStore.colorScale(topic.id)"
-              />
-            </div>
-          </BListGroupItem>
-        </BListGroup>
-      </BCol>
-      <BCol>
-        <BRow v-if="wordCloudStore.allWords.length > 0">
-          <WordCloud />
-        </BRow>
-        <BRow
-          v-if="
-            Object.keys(similarityStore.similaritiesBetweenTopics).length > 0
-          "
-        >
-          <SimilarityMatrix />
-        </BRow>
-      </BCol>
-    </BRow>
-  </BContainer>
+  <div class="h-screen flex flex-col">
+    <!-- <div>
+      <AbsoluteRelativeSelector />
+    </div> -->
+    <div class="h-full">
+      <div class="grid grid-cols-4 h-full">
+        <div class="h-full col-span-2 grid grid-rows-12">
+          <div v-for="topic in datasetStore.topics" :key="topic.id">
+            <EventSequenceContainer
+              :topic="topic"
+              :color="datasetStore.colorScale(topic.id)"
+            />
+          </div>
+        </div>
+        <div class="h-full">
+          <div v-if="wordCloudStore.allWords.length > 0" class="h-2/3">
+            <WordCloud />
+          </div>
+          <div
+            v-if="
+              Object.keys(similarityStore.similaritiesBetweenTopics).length > 0
+            "
+            class="h-1/3"
+          >
+            <SimilarityMatrix />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -59,6 +55,5 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 10px;
   }
 </style>
