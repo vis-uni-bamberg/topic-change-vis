@@ -1,5 +1,10 @@
 <template>
-  <b-form-select v-model="metricsSettings" :options="options" class="mb-3">
+  <b-form-select
+    v-model="metricsSettings"
+    :options="options"
+    class="mb-3"
+    size="sm"
+  >
   </b-form-select>
 </template>
 

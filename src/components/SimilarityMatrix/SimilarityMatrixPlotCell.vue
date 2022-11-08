@@ -1,5 +1,5 @@
 <template>
-  <svg class="matrix-cell" :viewBox="`0 0 ${width / periodCount} ${height}`">
+  <svg class="w-full h-full" :viewBox="`0 0 ${width / periodCount} ${height}`">
     <rect
       v-for="(period, index) in topic.periods"
       :key="period.start"

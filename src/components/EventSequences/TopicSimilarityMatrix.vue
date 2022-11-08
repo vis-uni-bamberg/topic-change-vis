@@ -1,10 +1,7 @@
 <template>
-  <div v-if="similaritiesWithinTopic[topic.id.slice(1)]">
-    <b-button v-b-toggle="`matrix-collapse-${topic.id}`">
-      <span class="when-open">-</span><span class="when-closed">+</span>
-    </b-button>
+  <div>
     <b-collapse :id="`matrix-collapse-${topic.id}`">
-      <div class="mt-2">
+      <div v-if="similaritiesWithinTopic[topic.id.slice(1)]" class="mt-2">
         <svg :viewBox="`0 0 ${width} ${height}`">
           <g :transform="`translate(${[margin.left, margin.top]})`">
             <g
@@ -14,9 +11,9 @@
               <rect
                 v-for="(periodColumn, indexColumn) in topic.periods"
                 :key="`${periodColumn.id}-similarity-column-rect`"
-                :x="xScale(indexColumn)"
+                :x="xScale(periodColumn.id)"
                 :y="yScale(index)"
-                :width="xScale(1)"
+                :width="xScale.bandwidth()"
                 :height="yScale(1)"
                 :fill="
                   similarityScale(
@@ -48,6 +45,7 @@
 
   const props = defineProps<{
     topic: Topic
+    xScale: d3.ScaleBand<string>
   }>()
 
   const margin = {
@@ -58,13 +56,7 @@
   }
   const width = 400
   const height = 150
-  const xRange = width - margin.left - margin.right
   const yRange = height - margin.top - margin.bottom
-
-  const xScale = d3
-    .scaleLinear()
-    .domain([0, props.topic.periods.length])
-    .range([0, xRange])
 
   const yScale = d3
     .scaleLinear()
@@ -76,12 +68,3 @@
     .domain([0, 1])
     .range(['white', datasetStore.colorScale(props.topic.id)])
 </script>
-
-<style scoped>
-  .collapsed > .when-open {
-    display: none;
-  }
-  button:not(.collapsed) > .when-closed {
-    display: none;
-  }
-</style>

@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="word-cloud"
+    class="h-full w-full"
     :viewBox="`0 0 ${wordCloud.size()[0]} ${wordCloud.size()[1]}`"
   >
     <g
@@ -40,7 +40,7 @@
     left: 5,
   }
   const width = 400
-  const height = 650
+  const height = 500
 
   const wordSizeScale = d3
     .scaleSqrt()
@@ -48,7 +48,7 @@
       0,
       Math.max(...allWords.value.slice(0, 60).map((word) => word.count)),
     ])
-    .range([10, 80])
+    .range([5, 80])
 
   let wordCloud = buildWordCloud(allWords.value.slice(0, 60))
 

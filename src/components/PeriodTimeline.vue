@@ -18,7 +18,7 @@
   const timeScale = d3.scaleTime().domain([start, stop]).range([0, props.width])
 
   const axis = d3
-    .axisTop<Date>(timeScale)
+    .axisBottom<Date>(timeScale)
     .ticks(d3.timeMonth.every(3))
     .tickFormat(d3.timeFormat('%m/%y'))
     .tickSize(2)
