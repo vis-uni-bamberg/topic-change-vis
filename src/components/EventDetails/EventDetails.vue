@@ -1,19 +1,23 @@
 <template>
   <div class="border-2 border-black h-full">
-    <div v-if="selectedEvent">
+    <div>
       <h3>
         Selected Event:
         <span :style="`color: ${color}`">
           {{ selectedEvent?.id }}
         </span>
       </h3>
-      <span>from: {{ selectedEvent.start }}, to: {{ selectedEvent.end }}</span>
+      <span
+        >from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span
+      >
     </div>
-    <div>
-      <WordImpactList :words="selectedEvent?.words.slice(0, 5) ?? []" />
-    </div>
-    <div>
-      <WordImpactList :words="selectedEvent?.words.slice(5, 10) ?? []" />
+    <div v-if="selectedEvent">
+      <div>
+        <WordImpactList :words="selectedEvent?.words.slice(0, 5) ?? []" />
+      </div>
+      <div>
+        <WordImpactList :words="selectedEvent?.words.slice(5, 10) ?? []" />
+      </div>
     </div>
   </div>
 </template>
