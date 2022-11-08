@@ -13,7 +13,6 @@ export const useEventStore = defineStore('eventStore', {
       this.selectedEvent === payload
         ? (this.selectedEvent = null)
         : (this.selectedEvent = payload)
-      console.log(this.selectedEvent)
     },
     setHovered(payload: TopicPeriod | null): void {
       this.hoveredEvent = payload

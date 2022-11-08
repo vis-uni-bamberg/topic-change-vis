@@ -1,5 +1,5 @@
 <template>
-  <div class="border-2 border-black h-96">
+  <div class="border-2 border-black h-full">
     <div v-if="selectedEvent">
       <h3>
         Selected Event:

@@ -1,9 +1,5 @@
 <template>
-  <svg
-    class="w-full"
-    :viewBox="`0 0 ${width} ${height}`"
-    @click="topicStore.updateSelectedTopic(topic)"
-  >
+  <svg class="w-full" :viewBox="`0 0 ${width} ${height}`">
     <g :transform="`translate(${[xMargins.left, margin.top]})`">
       <PeriodTimeline :y="yRange" :width="xRange" />
       <TopicSizeAreaChart
@@ -61,11 +57,8 @@
   import { Topic } from '@/models/Topic'
   import { toRefs } from 'vue'
   import WordFrequencyChart from './WordFrequencyChart.vue'
-  import { useTopicStore } from '@/stores/topicStore'
   import TopicSizeAreaChart from './TopicSizeAreaChart.vue'
   import PeriodTimeline from '../PeriodTimeline.vue'
-
-  const topicStore = useTopicStore()
 
   const props = defineProps<{
     topic: Topic

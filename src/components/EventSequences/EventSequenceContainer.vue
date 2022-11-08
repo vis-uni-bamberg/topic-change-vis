@@ -2,7 +2,7 @@
   <div
     class="flex w-full"
     :class="selectedTopic?.id === topic.id ? 'bg-slate-300' : ''"
-    "
+    @click="useTopicStore().updateSelectedTopic(topic)"
   >
     <div class="w-1/5">
       {{ topic.id }}

@@ -10,7 +10,7 @@
         stroke="black"
         @mouseover="hoverEvent(data)"
         @mouseleave="hoverEvent(null)"
-        @click="selectEvent(data)"
+        @click="handleClick"
       />
     </g>
     <path
@@ -35,7 +35,7 @@
   const eventStore = useEventStore()
   const { hoveredEvent } = storeToRefs(eventStore)
 
-  defineProps<{
+  const props = defineProps<{
     data: TopicPeriod
     x: number
     y: number
@@ -48,7 +48,8 @@
   const hoverEvent = (event: TopicPeriod | null) => {
     eventStore.setHovered(event)
   }
-  const selectEvent = (event: TopicPeriod) => {
-    eventStore.setSelected(event)
+  const handleClick = (event: MouseEvent) => {
+    event.stopPropagation() // So that it does not trigger the topic selection
+    eventStore.setSelected(props.data)
   }
 </script>
