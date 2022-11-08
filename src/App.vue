@@ -21,7 +21,7 @@
     </div> -->
     <div class="h-full">
       <div class="grid grid-cols-3 h-full">
-        <div class="h-full grid grid-rows-12">
+        <div class="h-screen grid grid-rows-12">
           <div v-for="topic in datasetStore.topics" :key="topic.id">
             <EventSequenceContainer
               :topic="topic"
@@ -29,15 +29,15 @@
             />
           </div>
         </div>
-        <div class="h-full">
-          <div v-if="wordCloudStore.allWords.length > 0" class="h-2/3">
+        <div class="h-screen w-full">
+          <div v-if="wordCloudStore.allWords.length > 0" class="h-2/3 w-full">
             <WordCloud />
           </div>
           <div
             v-if="
               Object.keys(similarityStore.similaritiesBetweenTopics).length > 0
             "
-            class="h-1/3"
+            class="h-1/3 w-full"
           >
             <SimilarityMatrix />
           </div>

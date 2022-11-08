@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="h-[55rem] w-[50rem]"
+    class="h-full w-full"
     :viewBox="`0 0 ${wordCloud.size()[0]} ${wordCloud.size()[1]}`"
   >
     <g
