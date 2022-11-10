@@ -4,25 +4,24 @@
       <g :transform="`translate(${[200, 0]})`">
         <g ref="xAxis"></g>
       </g>
-      <text
+      <WordImpactWord
         v-for="(word, index) in words"
         :key="word.word + 'WordImpactList'"
-        :x="10"
+        :word="word"
         :y="(index + 1) * 20"
-      >
-        {{ word.word }}
-      </text>
+      />
     </g>
   </svg>
 </template>
 
 <script setup lang="ts">
   import * as d3 from 'd3'
-  import { MyWord } from '@/models/Word'
+  import { LooWord } from '@/models/Word'
   import { ref, watchEffect } from 'vue'
+  import WordImpactWord from './WordImpactWord.vue'
 
   const props = defineProps<{
-    words: MyWord[]
+    words: LooWord[]
   }>()
 
   const margin = {
@@ -36,7 +35,7 @@
 
   let xScale = d3
     .scaleLinear()
-    .domain([0, Math.max(...props.words.map((word) => word.count))])
+    .domain([0, Math.min(...props.words.map((word) => word.impact))])
     .range([0, width])
 
   const axis = d3.axisTop(xScale)
@@ -44,7 +43,7 @@
   const xAxis = ref<SVGSVGElement | null>(null)
 
   watchEffect(() => {
-    xScale.domain([0, Math.max(...props.words.map((word) => word.count))])
+    xScale.domain([0, Math.min(...props.words.map((word) => word.impact))])
     axis.scale(xScale)
     if (xAxis.value) {
       d3.select(xAxis.value).call(axis)

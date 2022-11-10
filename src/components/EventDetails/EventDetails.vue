@@ -13,10 +13,10 @@
     </div>
     <div v-if="selectedEvent">
       <div>
-        <WordImpactList :words="selectedEvent?.words.slice(0, 5) ?? []" />
+        <WordImpactList :words="selectedEvent?.loo.slice(0, 5) ?? []" />
       </div>
       <div>
-        <WordImpactList :words="selectedEvent?.words.slice(5, 10) ?? []" />
+        <WordImpactList :words="selectedEvent?.loo.slice(5, 10) ?? []" />
       </div>
     </div>
   </div>

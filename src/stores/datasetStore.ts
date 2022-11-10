@@ -15,16 +15,29 @@ export const useDatasetStore = defineStore('datasetStore', {
       const simData = await d3.csv('./data/sim.csv')
       const thresholdData = await d3.csv('./data/quantiles.csv')
       const periods: any[] = []
+      const looFileForTopics: d3.DSVRowArray<string>[] = []
 
       const filenames = []
       for (let i = 0; i < 79; i++) {
         filenames.push('./data/periods/period' + i + '.csv')
+      }
+      const looFilenames = []
+      for (let i = 1; i <= 12; i++) {
+        looFilenames.push('./data/loos_in_topics/loos_in_topic' + i + '.csv')
       }
 
       await Promise.all(filenames.map((filename) => d3.csv(filename))).then(
         (files) => {
           files.forEach((file) => {
             periods.push(file)
+          })
+        }
+      )
+
+      await Promise.all(looFilenames.map((filename) => d3.csv(filename))).then(
+        (files) => {
+          files.forEach((file) => {
+            looFileForTopics.push(file)
           })
         }
       )
@@ -56,11 +69,31 @@ export const useDatasetStore = defineStore('datasetStore', {
                 .filter((word) => word.count > 10)
             : []
 
+          const looWords = Object.values(
+            looFileForTopics[topicIndex][periodIndex]
+          )
+            .slice(1)
+            .map((word: string | undefined) => {
+              if (word) {
+                return {
+                  word: word.slice(0, word.indexOf(' ')),
+                  impact: +word.slice(word.indexOf(' ') + 1),
+                }
+              }
+              return {
+                word: '',
+                impact: -1,
+              }
+            })
+
           topic.periods.push({
             id: `${topic.id}-${periodIndex}`,
+            topic: topic.id,
+            period: periodIndex,
             similarity: +similarity,
             threshold: +threshold,
             words: words,
+            loo: looWords,
           })
         })
       })
