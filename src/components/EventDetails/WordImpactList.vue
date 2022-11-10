@@ -1,14 +1,16 @@
 <template>
-  <svg class="w-full">
+  <svg class="w-full" :height="height" :viewbox="`0 0 ${width} ${height}`">
     <g :transform="`translate(${[margin.left, margin.top]})`">
       <g :transform="`translate(${[200, 0]})`">
-        <g ref="xAxis"></g>
+        <g ref="xAxis" font-size="18"></g>
       </g>
       <WordImpactWord
         v-for="(word, index) in words"
-        :key="word.word + 'WordImpactList'"
+        :key="word.word + word.impact"
         :word="word"
-        :y="(index + 1) * 20"
+        :y="yScale(index)! + yScale(1)/2"
+        :height="yScale(1) * 0.9"
+        :value="xScale(word.impact)"
       />
     </g>
   </svg>
@@ -17,34 +19,38 @@
 <script setup lang="ts">
   import * as d3 from 'd3'
   import { LooWord } from '@/models/Word'
-  import { ref, watchEffect } from 'vue'
+  import { onMounted, ref } from 'vue'
   import WordImpactWord from './WordImpactWord.vue'
+  import { useDatasetStore } from '@/stores/datasetStore'
 
   const props = defineProps<{
     words: LooWord[]
   }>()
 
   const margin = {
-    top: 20,
+    top: 40,
     right: 5,
     bottom: 5,
     left: 5,
   }
 
   const width = 400
+  const height = 800
 
-  let xScale = d3
+  const xScale = d3
     .scaleLinear()
-    .domain([0, Math.min(...props.words.map((word) => word.impact))])
+    .domain([0, useDatasetStore().maxLoo])
     .range([0, width])
 
-  const axis = d3.axisTop(xScale)
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, props.words.length])
+    .range([0, height - margin.top])
 
-  const xAxis = ref<SVGSVGElement | null>(null)
+  const axis = d3.axisTop(xScale).ticks(5)
+  const xAxis = ref<SVGSVGElement | null>()
 
-  watchEffect(() => {
-    xScale.domain([0, Math.min(...props.words.map((word) => word.impact))])
-    axis.scale(xScale)
+  onMounted(() => {
     if (xAxis.value) {
       d3.select(xAxis.value).call(axis)
     }

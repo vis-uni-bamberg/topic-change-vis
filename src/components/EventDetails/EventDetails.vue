@@ -1,5 +1,5 @@
 <template>
-  <div class="border-2 border-black h-full">
+  <div class="border-2 border-black h-full flex flex-col">
     <div>
       <h3>
         Selected Event:
@@ -13,10 +13,7 @@
     </div>
     <div v-if="selectedEvent">
       <div>
-        <WordImpactList :words="selectedEvent?.loo.slice(0, 5) ?? []" />
-      </div>
-      <div>
-        <WordImpactList :words="selectedEvent?.loo.slice(5, 10) ?? []" />
+        <WordImpactList :words="selectedEvent?.loo ?? []" />
       </div>
     </div>
   </div>

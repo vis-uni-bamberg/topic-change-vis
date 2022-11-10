@@ -8,6 +8,7 @@ export const useDatasetStore = defineStore('datasetStore', {
   state: () => {
     return {
       topics: [] as Topic[],
+      maxLoo: 0,
     }
   },
   actions: {
@@ -16,6 +17,7 @@ export const useDatasetStore = defineStore('datasetStore', {
       const thresholdData = await d3.csv('./data/quantiles.csv')
       const periods: any[] = []
       const looFilesForTopics: d3.DSVRowArray<string>[] = []
+      let maxLoo = 0
 
       const filenames = []
       for (let i = 0; i < 79; i++) {
@@ -75,10 +77,12 @@ export const useDatasetStore = defineStore('datasetStore', {
             .slice(1)
             .map((word: string | undefined) => {
               if (word) {
-                return {
+                const looWord = {
                   word: word.slice(0, word.indexOf(' ')),
                   impact: +word.slice(word.indexOf(' ') + 1),
                 }
+                if (looWord.impact < maxLoo) maxLoo = looWord.impact
+                return looWord
               }
               return {
                 word: '',
@@ -100,6 +104,8 @@ export const useDatasetStore = defineStore('datasetStore', {
 
       const globalWordStore = useGlobalWordStore()
       globalWordStore.loadData(this.topics)
+
+      this.maxLoo = maxLoo
 
       useSimilarityStore().loadSimilaritiesBetweenTopics()
       useSimilarityStore().loadSimilaritiesWithinTopics()
