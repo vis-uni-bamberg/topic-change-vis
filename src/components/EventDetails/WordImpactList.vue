@@ -2,7 +2,7 @@
   <svg class="w-full" :height="height" :viewbox="`0 0 ${width} ${height}`">
     <g :transform="`translate(${[margin.left, margin.top]})`">
       <g :transform="`translate(${[200, 0]})`">
-        <g ref="xAxis" font-size="18"></g>
+        <g ref="xAxis"></g>
       </g>
       <WordImpactWord
         v-for="(word, index) in words"
@@ -52,7 +52,10 @@
 
   onMounted(() => {
     if (xAxis.value) {
-      d3.select(xAxis.value).call(axis)
+      d3.select(xAxis.value)
+        .call(axis)
+        .selectAll('.tick text')
+        .attr('font-size', 18)
     }
   })
 </script>
