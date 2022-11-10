@@ -15,7 +15,7 @@ export const useDatasetStore = defineStore('datasetStore', {
       const simData = await d3.csv('./data/sim.csv')
       const thresholdData = await d3.csv('./data/quantiles.csv')
       const periods: any[] = []
-      const looFileForTopics: d3.DSVRowArray<string>[] = []
+      const looFilesForTopics: d3.DSVRowArray<string>[] = []
 
       const filenames = []
       for (let i = 0; i < 79; i++) {
@@ -37,7 +37,7 @@ export const useDatasetStore = defineStore('datasetStore', {
       await Promise.all(looFilenames.map((filename) => d3.csv(filename))).then(
         (files) => {
           files.forEach((file) => {
-            looFileForTopics.push(file)
+            looFilesForTopics.push(file)
           })
         }
       )
@@ -70,7 +70,7 @@ export const useDatasetStore = defineStore('datasetStore', {
             : []
 
           const looWords = Object.values(
-            looFileForTopics[topicIndex][periodIndex]
+            looFilesForTopics[topicIndex][periodIndex]
           )
             .slice(1)
             .map((word: string | undefined) => {
