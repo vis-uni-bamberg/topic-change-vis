@@ -21,8 +21,13 @@
       <AbsoluteRelativeSelector />
     </div> -->
     <div class="h-full">
-      <div class="grid grid-cols-3 h-full">
-        <div class="h-screen grid grid-rows-12">
+      <div class="grid grid-cols-4 h-full">
+        <div class="h-screen w-full">
+          <div v-if="wordCloudStore.allWords.length > 0" class="h-full w-full">
+            <WordCloud />
+          </div>
+        </div>
+        <div class="h-screen grid grid-rows-12 col-span-2">
           <div v-for="topic in datasetStore.topics" :key="topic.id">
             <EventSequenceContainer
               :topic="topic"
@@ -30,9 +35,9 @@
             />
           </div>
         </div>
-        <div class="h-screen w-full">
-          <div v-if="wordCloudStore.allWords.length > 0" class="h-2/3 w-full">
-            <WordCloud />
+        <div class="h-screen w-full flex flex-col">
+          <div class="h-2/3 w-full">
+            <EventDetails />
           </div>
           <div
             v-if="
@@ -42,9 +47,6 @@
           >
             <SimilarityMatrix />
           </div>
-        </div>
-        <div class="h-screen w-full">
-          <EventDetails />
         </div>
       </div>
     </div>

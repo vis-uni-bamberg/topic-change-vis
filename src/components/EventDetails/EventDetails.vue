@@ -1,20 +1,16 @@
 <template>
-  <div class="h-full flex flex-col">
+  <div class="flex flex-col">
+    <h3>
+      Selected Event:
+      <span :style="`color: ${color}`">
+        {{ selectedEvent?.id }}
+      </span>
+    </h3>
+    <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span>
+  </div>
+  <div v-if="selectedEvent">
     <div>
-      <h3>
-        Selected Event:
-        <span :style="`color: ${color}`">
-          {{ selectedEvent?.id }}
-        </span>
-      </h3>
-      <span
-        >from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span
-      >
-    </div>
-    <div v-if="selectedEvent">
-      <div>
-        <WordImpactList :words="selectedEvent?.loo ?? []" />
-      </div>
+      <WordImpactList :words="selectedEvent?.loo ?? []" />
     </div>
   </div>
 </template>

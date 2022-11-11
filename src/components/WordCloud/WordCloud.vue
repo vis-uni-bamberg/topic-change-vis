@@ -40,17 +40,14 @@
     left: 5,
   }
   const width = 400
-  const height = 500
+  const height = 900
 
   const wordSizeScale = d3
     .scaleSqrt()
-    .domain([
-      0,
-      Math.max(...allWords.value.slice(0, 60).map((word) => word.count)),
-    ])
-    .range([5, 80])
+    .domain([0, allWords.value[0].count])
+    .range([5, 60])
 
-  let wordCloud = buildWordCloud(allWords.value.slice(0, 60))
+  let wordCloud = buildWordCloud(allWords.value.slice(0, 100))
 
   function buildWordCloud(words: MyWord[]) {
     const layout = cloud<MyWord>()

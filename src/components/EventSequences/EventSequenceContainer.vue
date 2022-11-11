@@ -4,7 +4,7 @@
     :class="selectedTopic?.id === topic.id ? 'border-slate-800 border-4' : ''"
     @click="useTopicStore().updateSelectedTopic(topic)"
   >
-    <div class="w-1/5 flex flex-col">
+    <div class="w-1/6 flex flex-col">
       <span class="font-bold">
         {{ topic.id }}
       </span>
@@ -23,7 +23,7 @@
         </b-button>
       </div>
     </div>
-    <div class="w-4/5">
+    <div class="w-5/6">
       <EventSequence
         :topic="topic"
         :color="color"
