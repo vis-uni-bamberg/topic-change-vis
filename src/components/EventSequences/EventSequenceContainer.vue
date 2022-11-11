@@ -1,14 +1,27 @@
 <template>
   <div
-    class="flex w-full"
+    class="flex w-full text-xs"
     :class="selectedTopic?.id === topic.id ? 'border-slate-800 border-4' : ''"
     @click="useTopicStore().updateSelectedTopic(topic)"
   >
-    <div class="w-1/5">
-      {{ topic.id }}
-      <b-button v-b-toggle="`matrix-collapse-${topic.id}`">
-        <span class="when-open">-</span><span class="when-closed">+</span>
-      </b-button>
+    <div class="w-1/5 flex flex-col">
+      <span class="font-bold">
+        {{ topic.id }}
+      </span>
+      <div>
+        <span> Similarity: </span>
+        <span> Threshold: </span>
+      </div>
+      <div>
+        <span> Topic size: </span>
+        <span> Word Relevance: </span>
+      </div>
+      <div class="mt-2">
+        <b-button v-b-toggle="`matrix-collapse-${topic.id}`" pill size="sm">
+          <span class="when-open">Close</span
+          ><span class="when-closed">Open</span>
+        </b-button>
+      </div>
     </div>
     <div class="w-4/5">
       <EventSequence
