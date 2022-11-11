@@ -1,8 +1,21 @@
 <template>
   <g :transform="`translate(${10}, ${y})`">
-    <text y="5" @click="useWordStore().updateSelectedWord(word.word)">
-      {{ word.word }}
-    </text>
+    <text
+      :id="`word-label-${word.word}`"
+      class="cursor-pointer"
+      y="5"
+      @click="useWordStore().updateSelectedWord(word.word)"
+    >
+      {{ word.word }} </text
+    ><rect
+      v-if="word.word === useWordStore().selectedWord"
+      :transform="`translate(${0} ${-textHeight * 0.5})`"
+      x="-1"
+      :width="textWidth"
+      :height="textHeight"
+      fill="none"
+      stroke="black"
+    />
     <g :transform="`translate(190, 0)`">
       <rect
         :transform="`translate(0, ${-height / 2})`"
@@ -11,25 +24,20 @@
         :fill="datasetStore.colorScale(selectedEvent?.topic!)"
       />
       <text x="5" y="5">
-        {{
-          `${frequency[frequency.length - 1]} (Ø${
-            frequency
-              .slice(0, frequency.length - 1)
-              .reduce((a, b) => a + b, 0) / 4
-          })`
-        }}
+        {{ `${frequency} (Ø${frequnecyReference})` }}
       </text>
     </g>
   </g>
 </template>
 
 <script setup lang="ts">
+  import * as d3 from 'd3'
   import { LooWord } from '@/models/Word'
   import { useDatasetStore } from '@/stores/datasetStore'
   import { useEventStore } from '@/stores/eventStore'
   import { useWordStore } from '@/stores/wordStore'
   import { storeToRefs } from 'pinia'
-  import { ref } from 'vue'
+  import { onMounted, ref } from 'vue'
 
   const eventStore = useEventStore()
   const { selectedEvent } = storeToRefs(eventStore)
@@ -45,7 +53,7 @@
 
   const period = ref(selectedEvent.value?.period ?? 0)
 
-  const frequency = ref(
+  const frequencies = ref(
     datasetStore.topics
       .find((topic) => topic.id === selectedEvent.value?.topic)
       ?.periods.slice(Math.max(0, period.value - 4), period.value + 1)
@@ -55,4 +63,26 @@
             ?.count ?? 0
       ) ?? []
   )
+
+  const frequency = frequencies.value[frequencies.value.length - 1]
+  const frequnecyReference =
+    frequencies.value
+      .slice(0, frequencies.value.length - 1)
+      .reduce((a, b) => a + b, 0) / 4
+
+  let textWidth = ref(0)
+  let textHeight = ref(0)
+
+  onMounted(() => {
+    textWidth.value =
+      d3
+        .select<SVGGraphicsElement, unknown>(`#word-label-${props.word.word}`)
+        .node()
+        ?.getBBox().width ?? 0
+    textHeight.value =
+      d3
+        .select<SVGGraphicsElement, unknown>(`#word-label-${props.word.word}`)
+        .node()
+        ?.getBBox().height ?? 0
+  })
 </script>
