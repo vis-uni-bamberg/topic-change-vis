@@ -1,5 +1,5 @@
 <template>
-  <div class="border-2 border-black h-full flex flex-col">
+  <div class="h-full flex flex-col">
     <div>
       <h3>
         Selected Event:
