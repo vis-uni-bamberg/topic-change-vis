@@ -30,45 +30,46 @@ export const useGlobalWordStore = defineStore('globalWordStore', {
     },
 
     getTopicsToWords(payload: Topic[]): void {
-      this.topicsToWords = payload.reduce(
-        (acc, topic) => ({
-          ...acc,
-          [topic.id]: topic.periods
-            .map((period) => period.words)
-            .flat()
-            .reduce((words: MyWord[], otherWord: MyWord) => {
-              const word = words.find((word) => word.word === otherWord.word)
-              if (word) {
-                word.count += otherWord.count
-              } else {
-                words.push({
-                  word: otherWord.word,
-                  count: otherWord.count,
-                })
+      const topicsToWords = {} as { [topicId: string]: MyWord[] }
+
+      payload.forEach((topic) => {
+        const words = {} as { [word: string]: MyWord }
+
+        topic.periods
+          .map((period) => period.words)
+          .flat()
+          .forEach((word) => {
+            if (!words[word.word]) {
+              words[word.word] = {
+                word: word.word,
+                count: 0,
               }
-              return words
-            }, []),
-        }),
-        {}
-      )
+            }
+            words[word.word].count += word.count
+          })
+
+        topicsToWords[topic.id] = Object.values(words)
+      })
+
+      this.topicsToWords = topicsToWords
     },
 
     getAllWords(): void {
-      this.allWords = Object.values(this.topicsToWords)
+      const words = {} as { [word: string]: MyWord }
+
+      Object.values(this.topicsToWords)
         .flat()
-        .reduce((words: MyWord[], otherWord: MyWord) => {
-          const word = words.find((word) => word.word === otherWord.word)
-          if (word) {
-            word.count += otherWord.count
-          } else {
-            words.push({
-              word: otherWord.word,
-              count: otherWord.count,
-            })
+        .forEach((word) => {
+          if (!words[word.word]) {
+            words[word.word] = {
+              word: word.word,
+              count: 0,
+            }
           }
-          return words
-        }, [])
-        .sort((a, b) => b.count - a.count)
+          words[word.word].count += word.count
+        })
+
+      this.allWords = Object.values(words).sort((a, b) => b.count - a.count)
     },
 
     getMaxGlobalWordCountInSinglePeriod(payload: Topic[]): void {
