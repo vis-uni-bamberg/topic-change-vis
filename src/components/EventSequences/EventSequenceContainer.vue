@@ -8,13 +8,13 @@
       <span class="font-bold">
         {{ topic.id }}
       </span>
-      <div>
-        <span> Similarity: </span>
-        <span> Threshold: </span>
+      <div class="flex">
+        <SvgLegend type="line" :color="color" name="Sim" />
+        <SvgLegend type="line" color="black" name="TH" />
       </div>
-      <div>
-        <span> Topic size: </span>
-        <span> Word Relevance: </span>
+      <div class="flex">
+        <SvgLegend type="area" :color="color" name="TS" />
+        <SvgLegend type="dotLine" :color="color" name="WR" />
       </div>
       <div class="mt-2">
         <b-button v-b-toggle="`matrix-collapse-${topic.id}`" pill size="sm">
@@ -45,6 +45,7 @@
   import EventSequence from '@/components/EventSequences/EventSequence.vue'
   import TopicSimilarityMatrix from './TopicSimilarityMatrix.vue'
   import { toRefs } from 'vue'
+  import SvgLegend from './SvgLegend.vue'
 
   const topicStore = useTopicStore()
   const { selectedTopic } = storeToRefs(topicStore)
