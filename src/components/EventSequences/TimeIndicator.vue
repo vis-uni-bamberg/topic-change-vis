@@ -1,6 +1,6 @@
 <template>
   <rect
-    v-if="selectedPeriod"
+    v-if="selectedPeriod !== undefined && selectedPeriod >= 0"
     :x="xScale(topic.id + '-' + selectedPeriod)"
     :width="xScale.step()"
     :y="0"

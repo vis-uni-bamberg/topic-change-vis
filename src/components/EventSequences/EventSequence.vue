@@ -92,7 +92,7 @@
       (ptr[0] - props.xMargins.left - props.xScale.step() / 2) /
         props.xScale.step()
     )
-    if (clickedPeriod < 79) {
+    if (clickedPeriod >= 0 && clickedPeriod < 79) {
       usePeriodStore().setSelected(clickedPeriod)
     }
   }
