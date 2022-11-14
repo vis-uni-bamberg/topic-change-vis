@@ -57,7 +57,7 @@
 
   const margin = {
     right: 5,
-    left: 5,
+    left: 0,
   }
 
   const width = 400

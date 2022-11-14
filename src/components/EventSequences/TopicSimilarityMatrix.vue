@@ -52,7 +52,7 @@
     top: 5,
     right: 5,
     bottom: 5,
-    left: 5,
+    left: 0,
   }
   const width = 400
   const height = 150
