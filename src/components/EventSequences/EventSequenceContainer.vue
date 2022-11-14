@@ -1,7 +1,7 @@
 <template>
   <div
     class="flex w-full text-xs"
-    :class="selectedTopic?.id === topic.id ? 'bg-slate-100' : ''"
+    :class="selectedTopic?.id === topic.id ? 'bg-slate-300' : ''"
   >
     <div
       class="w-1/6 flex flex-col"
