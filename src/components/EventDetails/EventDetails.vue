@@ -37,8 +37,8 @@
   watchEffect(() => {
     if (selectedTopic.value) {
       color.value = useDatasetStore().colorScale(selectedTopic.value?.id)
-      selectedEvent.value =
-        selectedTopic.value.periods[selectedPeriod.value ?? 0]
+      if (selectedPeriod.value)
+        selectedEvent.value = selectedTopic.value.periods[selectedPeriod.value]
     } else {
       color.value = 'black'
       selectedEvent.value = undefined
