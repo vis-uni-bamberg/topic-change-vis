@@ -63,6 +63,10 @@
   import PeriodTimeline from '../PeriodTimeline.vue'
   import TimeIndicator from './TimeIndicator.vue'
   import { usePeriodStore } from '@/stores/periodStore'
+  import { useTopicStore } from '@/stores/topicStore'
+
+  const periodStore = usePeriodStore()
+  const topicStore = useTopicStore()
 
   const props = defineProps<{
     topic: Topic
@@ -93,8 +97,26 @@
       (ptr[0] - props.xMargins.left - props.xScale.step() / 2) /
         props.xScale.step()
     )
-    if (clickedPeriod >= 0 && clickedPeriod < 79) {
-      usePeriodStore().setSelected(clickedPeriod)
+
+    const periodChange = clickedPeriod !== periodStore.selectedPeriod
+    const topicChange = topic.value !== topicStore.selectedTopic
+
+    if (topicChange && periodChange) {
+      if (clickedPeriod >= 0 && clickedPeriod < 79) {
+        periodStore.setSelected(clickedPeriod)
+      }
+      topicStore.updateSelectedTopic(props.topic)
+    } else if (topicChange && !periodChange) {
+      topicStore.updateSelectedTopic(props.topic)
+    } else if (!topicChange && periodChange) {
+      if (clickedPeriod >= 0 && clickedPeriod < 79) {
+        periodStore.setSelected(clickedPeriod)
+      }
+    } else {
+      if (clickedPeriod >= 0 && clickedPeriod < 79) {
+        periodStore.setSelected(clickedPeriod)
+      }
+      topicStore.updateSelectedTopic(props.topic)
     }
   }
 </script>

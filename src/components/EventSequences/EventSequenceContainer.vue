@@ -2,9 +2,11 @@
   <div
     class="flex w-full text-xs"
     :class="selectedTopic?.id === topic.id ? 'bg-slate-100' : ''"
-    @click="useTopicStore().updateSelectedTopic(topic)"
   >
-    <div class="w-1/6 flex flex-col">
+    <div
+      class="w-1/6 flex flex-col"
+      @click="useTopicStore().updateSelectedTopic(topic)"
+    >
       <span class="font-bold">
         {{ topic.id }}
       </span>
