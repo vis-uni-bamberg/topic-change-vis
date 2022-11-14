@@ -7,7 +7,6 @@
         }`"
         :fill="color"
         stroke="black"
-        @click="handleClick"
       />
     </g>
     <path
@@ -25,11 +24,9 @@
 
 <script lang="ts" setup>
   import { Topic } from '@/models/Topic'
-  import { usePeriodStore } from '@/stores/periodStore'
-  import { useTopicStore } from '@/stores/topicStore'
   import { line } from 'd3-shape'
 
-  const props = defineProps<{
+  defineProps<{
     topic: Topic
     period: number
     x: number
@@ -39,10 +36,4 @@
   }>()
 
   const leader = line()
-
-  const handleClick = (event: MouseEvent) => {
-    event.stopPropagation() // So that it does not trigger the topic selection
-    usePeriodStore().setSelected(props.period)
-    useTopicStore().updateSelectedTopic(props.topic)
-  }
 </script>
