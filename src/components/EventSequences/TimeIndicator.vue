@@ -10,6 +10,18 @@
     fill="lightgray"
     opacity="0.5"
   />
+  <rect
+    v-if="selectedPeriod !== undefined && selectedPeriod >= 0"
+    :transform="`translate(${-xScale.step() * 4}, 0)`"
+    :x="xScale(topic.id + '-' + selectedPeriod)"
+    :width="xScale.step() * 4"
+    :y="0"
+    :height="height"
+    stroke="black"
+    stroke-width="0.5"
+    fill="lightgray"
+    opacity="0.25"
+  />
 </template>
 
 <script setup lang="ts">
