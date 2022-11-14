@@ -6,7 +6,11 @@
       :x="xScale(period)"
       :width="xScale(1)"
       y="0"
-      height="2"
+      :height="
+        period > (selectedPeriod ?? -1) - 4 && period <= (selectedPeriod ?? -1)
+          ? 15
+          : 2
+      "
       :fill="getColor(word, period)"
     />
   </g>
@@ -16,9 +20,13 @@
   import { useGlobalWordStore } from '@/stores/globalWordStore'
   import { storeToRefs } from 'pinia'
   import { useDatasetStore } from '@/stores/datasetStore'
+  import { usePeriodStore } from '@/stores/periodStore'
 
   const globalWordStore = useGlobalWordStore()
   const { wordsToHighestTopicPerPeriod } = storeToRefs(globalWordStore)
+
+  const periodStore = usePeriodStore()
+  const { selectedPeriod } = storeToRefs(periodStore)
 
   const datasetStore = useDatasetStore()
 
