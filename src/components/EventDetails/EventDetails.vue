@@ -10,7 +10,7 @@
         {{ selectedPeriod }}
       </span>
     </h3>
-    <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span>
+    <!-- <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span> -->
   </div>
   <div v-if="selectedEvent">
     <div>
