@@ -1,5 +1,5 @@
 <template>
-  <svg class="w-full" :viewBox="`0 0 ${width} ${height}`">
+  <svg class="w-full" :viewBox="`0 0 ${width} ${height}`" @click="handleClick">
     <g :transform="`translate(${[xMargins.left, margin.top]})`">
       <PeriodTimeline :y="yRange" :width="xRange" />
       <TopicSizeAreaChart
@@ -45,6 +45,7 @@
         :x-scale="xScale"
         :y-scale="yScale"
       />
+      <TimeIndicator :topic="topic" :x-scale="xScale" :height="yRange" />
     </g>
   </svg>
 </template>
@@ -59,6 +60,8 @@
   import WordFrequencyChart from './WordFrequencyChart.vue'
   import TopicSizeAreaChart from './TopicSizeAreaChart.vue'
   import PeriodTimeline from '../PeriodTimeline.vue'
+  import TimeIndicator from './TimeIndicator.vue'
+  import { usePeriodStore } from '@/stores/periodStore'
 
   const props = defineProps<{
     topic: Topic
@@ -82,4 +85,15 @@
   const glyphSize = config.eventGlyphSize
 
   const yScale = d3.scaleLinear().domain([0, 1]).range([yRange, 0])
+
+  const handleClick = (e: MouseEvent) => {
+    const ptr = d3.pointer(e)
+    const clickedPeriod = Math.round(
+      (ptr[0] - props.xMargins.left - props.xScale.step() / 2) /
+        props.xScale.step()
+    )
+    if (clickedPeriod < 79) {
+      usePeriodStore().setSelected(clickedPeriod)
+    }
+  }
 </script>
