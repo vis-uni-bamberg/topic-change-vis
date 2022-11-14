@@ -32,7 +32,8 @@
             (period) => period.similarity <= period.threshold
           )"
           :key="period.id"
-          :data="period"
+          :topic="topic"
+          :period="period.period"
           :x="(xScale(period.id) ?? 0) + xScale.step() / 2"
           :y="yScale(period.similarity)"
           :size="glyphSize"

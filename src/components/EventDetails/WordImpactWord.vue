@@ -21,7 +21,7 @@
         :transform="`translate(0, ${-height / 2})`"
         :width="value"
         :height="height"
-        :fill="datasetStore.colorScale(selectedEvent?.topic!)"
+        :fill="color"
       />
       <text x="5" y="5">
         {{ `${frequency} (Ø${frequnecyReference})` }}
@@ -34,13 +34,9 @@
   import * as d3 from 'd3'
   import { LooWord } from '@/models/Word'
   import { useDatasetStore } from '@/stores/datasetStore'
-  import { useEventStore } from '@/stores/eventStore'
   import { useWordStore } from '@/stores/wordStore'
-  import { storeToRefs } from 'pinia'
   import { onMounted, ref } from 'vue'
-
-  const eventStore = useEventStore()
-  const { selectedEvent } = storeToRefs(eventStore)
+  import { TopicPeriod } from '@/models/TopicPeriod'
 
   const datasetStore = useDatasetStore()
 
@@ -49,13 +45,15 @@
     y: number
     value: number
     height: number
+    color: string
+    event: TopicPeriod
   }>()
 
-  const period = ref(selectedEvent.value?.period ?? 0)
+  const period = ref(props.event?.period ?? 0)
 
   const frequencies = ref(
     datasetStore.topics
-      .find((topic) => topic.id === selectedEvent.value?.topic)
+      .find((topic) => topic.id === props.event?.topic)
       ?.periods.slice(Math.max(0, period.value - 4), period.value + 1)
       .map(
         (referencePeriod) =>

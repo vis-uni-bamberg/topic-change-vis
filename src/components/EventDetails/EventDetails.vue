@@ -1,41 +1,47 @@
 <template>
   <div class="flex flex-col">
     <h3>
-      Selected Event:
+      Topic:
       <span :style="`color: ${color}`">
-        {{ selectedEvent?.id }}
+        {{ selectedTopic?.id }}
+      </span>
+      - Period:
+      <span :style="`color: ${color}`">
+        {{ selectedPeriod }}
       </span>
     </h3>
     <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span>
   </div>
   <div v-if="selectedEvent">
     <div>
-      <WordImpactList :words="selectedEvent?.loo ?? []" />
+      <WordImpactList :color="color" :event="selectedEvent" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
+  import { TopicPeriod } from '@/models/TopicPeriod'
   import { useDatasetStore } from '@/stores/datasetStore'
-  import { useEventStore } from '@/stores/eventStore'
+  import { usePeriodStore } from '@/stores/periodStore'
+  import { useTopicStore } from '@/stores/topicStore'
   import { storeToRefs } from 'pinia'
   import { ref, watchEffect } from 'vue'
   import WordImpactList from './WordImpactList.vue'
 
-  const eventStore = useEventStore()
-  const { selectedEvent } = storeToRefs(eventStore)
+  const { selectedTopic } = storeToRefs(useTopicStore())
+  const { selectedPeriod } = storeToRefs(usePeriodStore())
 
-  let topic = ref('')
+  let selectedEvent = ref(undefined as TopicPeriod | undefined)
+
   let color = ref('black')
 
   watchEffect(() => {
-    if (selectedEvent) {
-      topic.value =
-        selectedEvent.value?.id.slice(
-          0,
-          selectedEvent.value?.id.indexOf('-')
-        ) ?? ''
-
-      color.value = useDatasetStore().colorScale(topic.value ?? '')
+    if (selectedTopic.value) {
+      color.value = useDatasetStore().colorScale(selectedTopic.value?.id)
+      selectedEvent.value =
+        selectedTopic.value.periods[selectedPeriod.value ?? 0]
+    } else {
+      color.value = 'black'
+      selectedEvent.value = undefined
     }
   })
 </script>

@@ -5,12 +5,14 @@
         <g ref="xAxis"></g>
       </g>
       <WordImpactWord
-        v-for="(word, index) in words"
+        v-for="(word, index) in event.loo"
         :key="word.word + word.impact"
         :word="word"
         :y="yScale(index)! + yScale(1)/2"
         :height="yScale(1) * 0.9"
         :value="xScale(word.impact)"
+        :color="color"
+        :event="event"
       />
     </g>
   </svg>
@@ -18,13 +20,14 @@
 
 <script setup lang="ts">
   import * as d3 from 'd3'
-  import { LooWord } from '@/models/Word'
   import { onMounted, ref } from 'vue'
   import WordImpactWord from './WordImpactWord.vue'
   import { useDatasetStore } from '@/stores/datasetStore'
+  import { TopicPeriod } from '@/models/TopicPeriod'
 
   const props = defineProps<{
-    words: LooWord[]
+    event: TopicPeriod
+    color: string
   }>()
 
   const margin = {
@@ -44,7 +47,7 @@
 
   const yScale = d3
     .scaleLinear()
-    .domain([0, props.words.length])
+    .domain([0, props.event.loo.length])
     .range([0, height - margin.top])
 
   const axis = d3.axisTop(xScale).ticks(5)
