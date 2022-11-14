@@ -19,7 +19,12 @@
         <SvgLegend type="dotLine" :color="color" name="WR" />
       </div>
       <div class="mt-2">
-        <b-button v-b-toggle="`matrix-collapse-${topic.id}`" pill size="sm">
+        <b-button
+          v-b-toggle="`matrix-collapse-${topic.id}`"
+          pill
+          size="sm"
+          @click="(e: MouseEvent) => e.stopPropagation()"
+        >
           <span class="when-open">Close</span
           ><span class="when-closed">Open</span>
         </b-button>
