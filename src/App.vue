@@ -22,12 +22,14 @@
     </div> -->
     <div class="h-full">
       <div class="grid grid-cols-4 h-full">
-        <div class="h-screen w-full">
+        <div class="h-screen w-full border-2 border-slate-600">
           <div v-if="wordCloudStore.allWords.length > 0" class="h-full w-full">
             <WordCloud />
           </div>
         </div>
-        <div class="h-screen grid grid-rows-12 col-span-2">
+        <div
+          class="h-screen grid grid-rows-12 col-span-2 border-2 border-slate-600 overflow-y-scroll"
+        >
           <div v-for="topic in datasetStore.topics" :key="topic.id">
             <EventSequenceContainer
               :topic="topic"
@@ -35,7 +37,7 @@
             />
           </div>
         </div>
-        <div class="h-screen w-full flex flex-col">
+        <div class="h-screen w-full flex flex-col border-2 border-slate-600">
           <div class="h-2/3 w-full">
             <EventDetails />
           </div>

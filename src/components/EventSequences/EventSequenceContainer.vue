@@ -1,7 +1,7 @@
 <template>
   <div
     class="flex w-full text-xs"
-    :class="selectedTopic?.id === topic.id ? 'border-slate-800 border-4' : ''"
+    :class="selectedTopic?.id === topic.id ? 'bg-slate-100' : ''"
     @click="useTopicStore().updateSelectedTopic(topic)"
   >
     <div class="w-1/6 flex flex-col">

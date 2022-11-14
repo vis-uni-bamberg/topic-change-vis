@@ -79,7 +79,7 @@
     bottom: 12,
   }
   const width = 400
-  const height = 50
+  const height = 100
   const yRange = height - margin.top - margin.bottom
 
   const glyphSize = config.eventGlyphSize
