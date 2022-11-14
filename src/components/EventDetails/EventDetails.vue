@@ -11,6 +11,10 @@
       </span>
     </h3>
     <!-- <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span> -->
+    <span
+      >Similarity: {{ selectedEvent?.similarity.toPrecision(2) }} - Threshold:
+      {{ selectedEvent?.threshold.toPrecision(2) }}</span
+    >
   </div>
   <div v-if="selectedEvent">
     <div>
