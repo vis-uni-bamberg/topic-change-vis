@@ -6,7 +6,9 @@
     :y="0"
     :height="height"
     stroke="black"
-    fill="none"
+    stroke-width="0.5"
+    fill="lightgray"
+    opacity="0.5"
   />
 </template>
 
