@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full" :style="`background-color: ${color}`">
+  <div class="h-full w-full text-white" :style="`background-color: ${color}`">
     {{ similarity.toPrecision(2) }}
   </div>
 </template>
