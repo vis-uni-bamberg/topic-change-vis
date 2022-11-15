@@ -45,8 +45,10 @@
   const value = (topic: Topic, period: TopicPeriod, index: number) => {
     if (topicToPeriodToSize.value[topic.id][index] === 0) return 0
     return (
-      (period.words.find((word) => word.word === selectedWord.value)?.count ??
-        0) / topicToPeriodToSize.value[topic.id][index]
+      ((period.words.find((word) => word.word === selectedWord.value)?.count ??
+        0) *
+        5) /
+      topicToPeriodToSize.value[topic.id][index]
     )
   }
 
