@@ -9,7 +9,7 @@
         :y="yScale(value(topic, period, index))"
         :width="width"
         :height="height"
-        :fill="color"
+        :fill="value(topic, period, index) === 0 ? 'none' : color"
       />
       <path
         :d="connectionLineGenerator(topic.periods) ?? ''"
