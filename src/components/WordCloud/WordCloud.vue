@@ -47,7 +47,7 @@
     .domain([0, allWords.value[0].count])
     .range([5, 60])
 
-  let wordCloud = buildWordCloud(allWords.value.slice(0, 15))
+  let wordCloud = buildWordCloud(allWords.value.slice(0, 100))
 
   function buildWordCloud(words: MyWord[]) {
     const layout = cloud<MyWord>()
