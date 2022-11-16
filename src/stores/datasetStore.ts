@@ -1,5 +1,6 @@
 import { Topic } from '@/models/Topic'
 import * as d3 from 'd3'
+import { DSVRowArray } from 'd3'
 import { defineStore } from 'pinia'
 import { useGlobalWordStore } from './globalWordStore'
 import { useSimilarityStore } from './similarityStore'
@@ -15,9 +16,10 @@ export const useDatasetStore = defineStore('datasetStore', {
     async loadData(): Promise<void> {
       const simData = await d3.csv('./data/sim.csv')
       const thresholdData = await d3.csv('./data/quantiles.csv')
-      const periods: any[] = []
+      const periods: DSVRowArray<string>[] = []
       const looFilesForTopics: d3.DSVRowArray<string>[] = []
       let maxLoo = 0
+      const topicSizes = {} as { [topicId: string]: number }
 
       const filenames = []
       for (let i = 0; i < 79; i++) {
@@ -28,13 +30,13 @@ export const useDatasetStore = defineStore('datasetStore', {
         looFilenames.push('./data/loos_in_topics/loos_in_topic' + i + '.csv')
       }
 
-      await Promise.all(filenames.map((filename) => d3.csv(filename))).then(
-        (files) => {
-          files.forEach((file) => {
-            periods.push(file)
-          })
-        }
-      )
+      await Promise.all(
+        filenames.map((filename) => d3.csv<string>(filename))
+      ).then((files) => {
+        files.forEach((file) => {
+          periods.push(file)
+        })
+      })
 
       await Promise.all(looFilenames.map((filename) => d3.csv(filename))).then(
         (files) => {
@@ -52,6 +54,7 @@ export const useDatasetStore = defineStore('datasetStore', {
         }))
 
       this.topics.forEach((topic, topicIndex) => {
+        topicSizes[topic.id] = 0
         simData.forEach((period, periodIndex) => {
           const similarity = period[topic.id] ?? 0
           const threshold = thresholdData[periodIndex][topic.id] ?? 0
@@ -59,16 +62,20 @@ export const useDatasetStore = defineStore('datasetStore', {
           const words = periods[periodIndex]
             ? Object.entries(
                 periods[periodIndex]?.find(
-                  (period: { [x: string]: string }) =>
-                    +period[''] === topicIndex + 1
-                )
+                  (period) => +(period[''] ?? 0) === topicIndex + 1
+                ) ?? {}
               )
                 .slice(1)
-                .map((word) => ({
-                  word: word[0],
-                  count: +(word[1] as string),
-                }))
-                .filter((word) => word.count > 10)
+                .map((word: [string, string | undefined]) => {
+                  if (word[1]) {
+                    topicSizes[topic.id] += +word[1]
+                  }
+                  return {
+                    word: word[0],
+                    count: +(word[1] as string),
+                  }
+                })
+                .filter((word) => word?.count ?? 0 > 10)
             : []
 
           const looWords = Object.values(
@@ -101,6 +108,8 @@ export const useDatasetStore = defineStore('datasetStore', {
           })
         })
       })
+
+      this.topics.sort((a, b) => topicSizes[b.id] - topicSizes[a.id])
 
       const globalWordStore = useGlobalWordStore()
       globalWordStore.loadData(this.topics)
