@@ -1,6 +1,6 @@
 import { Topic } from '@/models/Topic'
 import * as d3 from 'd3'
-import { DSVRowArray, DSVRowString } from 'd3'
+import { DSVRowArray } from 'd3'
 import { defineStore } from 'pinia'
 import { useGlobalWordStore } from './globalWordStore'
 import { useSimilarityStore } from './similarityStore'
