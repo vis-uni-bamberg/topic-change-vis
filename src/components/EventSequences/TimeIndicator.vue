@@ -12,9 +12,9 @@
   />
   <rect
     v-if="selectedPeriod !== undefined && selectedPeriod >= 0"
-    :transform="`translate(${-xScale.step() * 4}, 0)`"
+    :transform="`translate(${-xScale.step() * referencePeriodSize}, 0)`"
     :x="xScale(topic.id + '-' + selectedPeriod)"
-    :width="xScale.step() * 4"
+    :width="xScale.step() * referencePeriodSize"
     :y="0"
     :height="height"
     stroke="black"
@@ -29,12 +29,22 @@
   import { usePeriodStore } from '@/stores/periodStore'
   import { ScaleBand } from 'd3-scale'
   import { storeToRefs } from 'pinia'
+  import { ref, watchEffect } from 'vue'
 
-  defineProps<{
+  const props = defineProps<{
     topic: Topic
     xScale: ScaleBand<string>
     height: number
   }>()
 
   const { selectedPeriod } = storeToRefs(usePeriodStore())
+
+  const referencePeriodSize = ref(0)
+
+  watchEffect(() => {
+    if (selectedPeriod.value) {
+      referencePeriodSize.value =
+        props.topic.periods[selectedPeriod.value].referencePeriodSize
+    }
+  })
 </script>

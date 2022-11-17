@@ -97,12 +97,26 @@ export const useDatasetStore = defineStore('datasetStore', {
               }
             })
 
+          const maxReferencePeriod = Math.min(4, periodIndex)
+
+          const distanceToLastChangePoint = topic.periods
+            .slice(periodIndex - maxReferencePeriod, periodIndex)
+            .reverse()
+            .findIndex((period) => period.isChangePoint)
+
+          const referencePeriodSize =
+            distanceToLastChangePoint > -1
+              ? distanceToLastChangePoint + 1
+              : maxReferencePeriod
+
           topic.periods.push({
             id: `${topic.id}-${periodIndex}`,
             topic: topic.id,
             period: periodIndex,
             similarity: +similarity,
             threshold: +threshold,
+            isChangePoint: +similarity < +threshold,
+            referencePeriodSize: referencePeriodSize,
             words: words,
             loo: looWords,
           })

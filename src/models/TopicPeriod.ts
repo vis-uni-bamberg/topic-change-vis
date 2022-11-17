@@ -8,6 +8,8 @@ export interface TopicPeriod {
   end?: string
   similarity: number
   threshold: number
+  isChangePoint: boolean
+  referencePeriodSize: number
   words: MyWord[]
   loo: LooWord[]
 }

@@ -66,7 +66,7 @@
   const frequnecyReference =
     frequencies.value
       .slice(0, frequencies.value.length - 1)
-      .reduce((a, b) => a + b, 0) / 4
+      .reduce((a, b) => a + b, 0) / props.event.referencePeriodSize
 
   let textWidth = ref(0)
   let textHeight = ref(0)
