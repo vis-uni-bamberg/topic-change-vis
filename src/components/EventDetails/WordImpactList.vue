@@ -1,7 +1,7 @@
 <template>
   <svg class="w-full" :height="height" :viewbox="`0 0 ${width} ${height}`">
     <g :transform="`translate(${[margin.left, margin.top]})`">
-      <g :transform="`translate(${[200, 0]})`">
+      <g :transform="`translate(${[width, 0]})`">
         <g ref="xAxis"></g>
       </g>
       <WordImpactWord
@@ -10,10 +10,14 @@
         :word="word"
         :y="yScale(index)! + yScale(1)/2"
         :height="yScale(1) * 0.9"
+        :x="width"
         :value="xScale(word.impact)"
         :color="color"
         :event="event"
       />
+      <g :transform="`translate(${[width, 0]})`">
+        <path :d="centralLine" stroke="black" />
+      </g>
     </g>
   </svg>
 </template>
@@ -42,15 +46,19 @@
 
   const xScale = d3
     .scaleLinear()
-    .domain([0, useDatasetStore().maxLoo])
-    .range([0, width])
+    .domain([useDatasetStore().maxLoo, -useDatasetStore().maxLoo])
+    .range([-width / 2, width / 2])
 
   const yScale = d3
     .scaleLinear()
     .domain([0, props.event.loo.length])
     .range([0, height - margin.top])
 
-  const axis = d3.axisTop(xScale).ticks(5)
+  const axis = d3
+    .axisTop(xScale)
+    .ticks(5)
+    .tickFormat((d) => Math.abs(d.valueOf()).toString())
+
   const xAxis = ref<SVGSVGElement | null>()
 
   onMounted(() => {
@@ -61,4 +69,10 @@
         .attr('font-size', 18)
     }
   })
+
+  const centralLine =
+    d3.line()([
+      [0, 0],
+      [0, height],
+    ]) ?? ''
 </script>

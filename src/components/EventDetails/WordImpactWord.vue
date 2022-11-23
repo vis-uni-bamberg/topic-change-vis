@@ -1,5 +1,5 @@
 <template>
-  <g :transform="`translate(${10}, ${y})`">
+  <g :transform="`translate(0, ${y})`">
     <text
       :id="`word-label-${word.word}`"
       class="cursor-pointer"
@@ -16,17 +16,25 @@
       fill="none"
       stroke="black"
     />
-    <g :transform="`translate(190, 0)`">
-      <rect
-        :transform="`translate(0, ${-height / 2})`"
-        :width="value"
-        :height="height"
-        :fill="color"
-      />
-      <text x="5" y="5">
-        {{ `${frequency} (Ø${frequnecyReference})` }}
-      </text>
-    </g>
+  </g>
+  <g
+    :transform="`translate(${
+      frequency < frequnecyReference ? x + value : x
+    }, ${y})`"
+  >
+    <rect
+      :transform="`translate(0, ${-height / 2})`"
+      :width="-value"
+      :height="height"
+      :fill="color"
+    />
+    <text
+      :x="frequency < frequnecyReference ? -value - 5 : 5"
+      y="5"
+      :text-anchor="frequency < frequnecyReference ? 'end' : 'start'"
+    >
+      {{ `${frequency} (Ø${frequnecyReference})` }}
+    </text>
   </g>
 </template>
 
@@ -43,6 +51,7 @@
   const props = defineProps<{
     word: LooWord
     y: number
+    x: number
     value: number
     height: number
     color: string
@@ -64,9 +73,13 @@
 
   const frequency = frequencies.value[frequencies.value.length - 1]
   const frequnecyReference =
-    frequencies.value
-      .slice(0, frequencies.value.length - 1)
-      .reduce((a, b) => a + b, 0) / props.event.referencePeriodSize
+    Math.round(
+      (100 *
+        frequencies.value
+          .slice(0, frequencies.value.length - 1)
+          .reduce((a, b) => a + b, 0)) /
+        props.event.referencePeriodSize
+    ) / 100
 
   let textWidth = ref(0)
   let textHeight = ref(0)
