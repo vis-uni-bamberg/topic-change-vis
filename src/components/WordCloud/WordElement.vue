@@ -6,6 +6,15 @@
       :font-size="fontSize"
       :text-anchor="'middle'"
       :fill="textColor"
+      :opacity="
+        selectedTopic && selectedPeriod
+          ? value(
+              selectedTopic,
+              selectedTopic?.periods[selectedPeriod ?? 0],
+              selectedPeriod ?? 0
+            )
+          : 1
+      "
       @click="wordStore.updateSelectedWord(text!)"
     >
       {{ text }}
@@ -32,12 +41,18 @@
   import { useGlobalWordStore } from '@/stores/globalWordStore'
   import { useTopicStore } from '@/stores/topicStore'
   import WordScarfPlot from './WordScarfPlot.vue'
+  import { Topic } from '@/models/Topic'
+  import { TopicPeriod } from '@/models/TopicPeriod'
+  import { usePeriodStore } from '@/stores/periodStore'
 
   const globalWordStore = useGlobalWordStore()
-  const { topicsToWords } = storeToRefs(globalWordStore)
+  const { topicsToWords, topicToPeriodToSize } = storeToRefs(globalWordStore)
 
   const topicStore = useTopicStore()
   const { selectedTopic, topicColor } = storeToRefs(topicStore)
+
+  const periodStore = usePeriodStore()
+  const { selectedPeriod } = storeToRefs(periodStore)
 
   const wordStore = useWordStore()
 
@@ -87,4 +102,15 @@
         .node()
         ?.getBBox().height ?? 0
   })
+
+  const opacityScale = d3.scaleLinear().domain([0, 1]).range([0.1, 1])
+  const value = (topic: Topic, period: TopicPeriod, index: number) => {
+    if (topicToPeriodToSize.value[topic.id][index] === 0) return 0
+    return opacityScale(
+      (((period.words.find((word) => word.word === props.text)?.count ?? 0) *
+        5) /
+        topicToPeriodToSize.value[topic.id][index]) *
+        20
+    )
+  }
 </script>
