@@ -34,7 +34,7 @@
     otherTopic: Topic
   }>()
 
-  const width = 300
+  const width = 320
   const height = 2
 
   const similarityScale = d3.interpolateGreys
