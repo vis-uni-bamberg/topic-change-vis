@@ -63,7 +63,10 @@
   const frequencies = ref(
     datasetStore.topics
       .find((topic) => topic.id === props.event?.topic)
-      ?.periods.slice(Math.max(0, period.value - 4), period.value + 1)
+      ?.periods.slice(
+        Math.max(0, period.value - props.event.referencePeriodSize),
+        period.value + 1
+      )
       .map(
         (referencePeriod) =>
           referencePeriod.words.find((word) => word.word === props.word.word)
