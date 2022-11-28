@@ -11,16 +11,18 @@
       class="w-1/6 flex flex-col"
       @click="useTopicStore().updateSelectedTopic(topic)"
     >
-      <span class="font-bold">
+      <span class="font-bold text-2xl">
         {{ topic.id }}
       </span>
-      <div class="flex">
-        <SvgLegend type="line" :color="color" name="Sim" />
-        <SvgLegend type="line" color="black" name="TH" />
-      </div>
-      <div class="flex">
-        <SvgLegend type="area" :color="color" name="TS" />
-        <SvgLegend type="dotLine" :color="color" name="WR" />
+      <div class="text-base">
+        <SvgLegend type="line" :color="color" name="Similarity" />
+        <SvgLegend type="line" color="black" name="Threshold" />
+        <SvgLegend type="area" :color="color" name="Topic Size" />
+        <SvgLegend
+          type="dotLine"
+          :color="color"
+          :name="`Relevance: ${selectedWord}`"
+        />
       </div>
       <div class="mt-2">
         <b-button
@@ -29,8 +31,8 @@
           size="sm"
           @click="(e: MouseEvent) => e.stopPropagation()"
         >
-          <span class="when-open">Close</span
-          ><span class="when-closed">Open</span>
+          <span class="when-open">Collapse</span
+          ><span class="when-closed">Inner-Topic Similarity</span>
         </b-button>
       </div>
     </div>
@@ -57,9 +59,13 @@
   import TopicSimilarityMatrix from './TopicSimilarityMatrix.vue'
   import { toRefs } from 'vue'
   import SvgLegend from './SvgLegend.vue'
+  import { useWordStore } from '@/stores/wordStore'
 
   const topicStore = useTopicStore()
   const { selectedTopic } = storeToRefs(topicStore)
+
+  const wordStore = useWordStore()
+  const { selectedWord } = storeToRefs(wordStore)
 
   const props = defineProps<{
     topic: Topic

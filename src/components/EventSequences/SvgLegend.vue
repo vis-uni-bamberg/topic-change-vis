@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3">
+  <div class="grid grid-cols-3 items-center">
     <span class="col-span-2">{{ name }} </span>
     <svg width="30" height="15">
       <path
