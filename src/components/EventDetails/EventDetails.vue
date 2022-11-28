@@ -5,7 +5,7 @@
       <span :style="`color: ${color}`">
         {{ selectedTopic?.id }}
       </span>
-      - Period:
+      - Time Step:
       <span :style="`color: ${color}`">
         {{ selectedPeriod }}
       </span>
