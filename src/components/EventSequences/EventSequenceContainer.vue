@@ -1,7 +1,11 @@
 <template>
   <div
     class="flex w-full text-xs"
-    :class="selectedTopic?.id === topic.id ? 'bg-slate-300' : ''"
+    :class="
+      selectedTopic?.id === topic.id
+        ? 'bg-slate-100 mt-4 mb-4 border-t-2 border-b-2 border-slate-700  '
+        : ''
+    "
   >
     <div
       class="w-1/6 flex flex-col"
