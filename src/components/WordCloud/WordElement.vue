@@ -13,6 +13,8 @@
               selectedTopic?.periods[selectedPeriod ?? 0],
               selectedPeriod ?? 0
             )
+          : selectedPeriod
+          ? valueGlobal(selectedPeriod)
           : 1
       "
       @click="wordStore.updateSelectedWord(text!)"
@@ -44,6 +46,7 @@
   import { Topic } from '@/models/Topic'
   import { TopicPeriod } from '@/models/TopicPeriod'
   import { usePeriodStore } from '@/stores/periodStore'
+  import { useDatasetStore } from '@/stores/datasetStore'
 
   const globalWordStore = useGlobalWordStore()
   const { topicsToWords, topicToPeriodToSize } = storeToRefs(globalWordStore)
@@ -53,6 +56,9 @@
 
   const periodStore = usePeriodStore()
   const { selectedPeriod } = storeToRefs(periodStore)
+
+  const datasetStore = useDatasetStore()
+  const { topics } = storeToRefs(datasetStore)
 
   const wordStore = useWordStore()
 
@@ -112,5 +118,19 @@
         topicToPeriodToSize.value[topic.id][index]) *
         20
     )
+  }
+  const valueGlobal = (periodIndex: number) => {
+    const wordRelevanceInPeriod =
+      topics.value
+        .map((topic) => topic.periods[periodIndex])
+        .map(
+          (period) =>
+            ((period.words.find((word) => word.word === props.text)?.count ??
+              0) *
+              5) /
+            period.words.reduce((a, word) => a + word.count, 0)
+        )
+        .reduce((a, b) => a + b, 0) * 1.5
+    return opacityScale(wordRelevanceInPeriod)
   }
 </script>
