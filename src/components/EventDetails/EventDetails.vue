@@ -10,11 +10,11 @@
         {{ selectedPeriod }}
       </span>
     </h3>
-    <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span>
-    <span
-      >Similarity: {{ selectedEvent?.similarity.toPrecision(2) }} - Threshold:
-      {{ selectedEvent?.threshold.toPrecision(2) }}</span
-    >
+    <h5>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</h5>
+    <h5>
+      Similarity: {{ selectedEvent?.similarity.toPrecision(2) }} - Threshold:
+      {{ selectedEvent?.threshold.toPrecision(2) }}
+    </h5>
   </div>
   <div v-if="selectedEvent" class="grid place-items-center">
     <WordImpactList :color="color" :event="selectedEvent" />
