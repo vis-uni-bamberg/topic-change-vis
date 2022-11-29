@@ -1,5 +1,5 @@
 <template>
-  <svg class="w-full" :height="height" :viewbox="`0 0 ${width} ${height}`">
+  <svg class="w-4/5" :height="height" :viewbox="`0 0 ${width} ${height}`">
     <g :transform="`translate(${[margin.left, margin.top]})`">
       <g :transform="`translate(${[width, 0]})`">
         <g ref="xAxis"></g>

@@ -16,10 +16,8 @@
       {{ selectedEvent?.threshold.toPrecision(2) }}</span
     >
   </div>
-  <div v-if="selectedEvent">
-    <div>
-      <WordImpactList :color="color" :event="selectedEvent" />
-    </div>
+  <div v-if="selectedEvent" class="grid place-items-center">
+    <WordImpactList :color="color" :event="selectedEvent" />
   </div>
 </template>
 <script setup lang="ts">
