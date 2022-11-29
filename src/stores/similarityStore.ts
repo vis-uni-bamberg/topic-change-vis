@@ -16,7 +16,7 @@ export const useSimilarityStore = defineStore('similarityStore', {
     async loadSimilaritiesBetweenTopics(): Promise<void> {
       const similarities = {} as SimilarityMatrix
       const filenames = []
-      for (let i = 0; i < 79; i++) {
+      for (let i = 0; i < 76; i++) {
         filenames.push(
           './data/similarities_between_topics/similarity_beteen_topics' +
             i +

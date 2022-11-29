@@ -3,8 +3,11 @@
 </template>
 
 <script setup lang="ts">
+  import { useDatasetStore } from '@/stores/datasetStore'
   import * as d3 from 'd3'
   import { onMounted, ref } from 'vue'
+
+  const datasetStore = useDatasetStore()
 
   const props = defineProps<{
     width: number
@@ -12,10 +15,14 @@
   }>()
 
   // "2020-01-22" "2020-01-31" - "2021-08-02""2021-08-05
-  const start = new Date(2020, 0, 22)
-  const stop = new Date(2021, 7, 5)
+  const timeParser = d3.timeParse('%Y-%m-%d')
+  const start = timeParser(datasetStore.timerange[0] ?? '')
+  const stop = timeParser(datasetStore.timerange[1] ?? '')
+  const timeScale = d3.scaleTime()
 
-  const timeScale = d3.scaleTime().domain([start, stop]).range([0, props.width])
+  if (start && stop) {
+    timeScale.domain([start, stop]).range([0, props.width])
+  }
 
   const axis = d3
     .axisBottom<Date>(timeScale)

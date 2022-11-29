@@ -10,7 +10,7 @@
         {{ selectedPeriod }}
       </span>
     </h3>
-    <!-- <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span> -->
+    <span>from: {{ selectedEvent?.start }}, to: {{ selectedEvent?.end }}</span>
     <span
       >Similarity: {{ selectedEvent?.similarity.toPrecision(2) }} - Threshold:
       {{ selectedEvent?.threshold.toPrecision(2) }}</span
@@ -41,7 +41,7 @@
   watchEffect(() => {
     if (selectedTopic.value) {
       color.value = useDatasetStore().colorScale(selectedTopic.value?.id)
-      if (selectedPeriod.value) {
+      if (selectedPeriod.value !== undefined) {
         selectedEvent.value = selectedTopic.value.periods[selectedPeriod.value]
       } else {
         selectedEvent.value = undefined

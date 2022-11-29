@@ -5,6 +5,8 @@ import { defineStore } from 'pinia'
 import { useGlobalWordStore } from './globalWordStore'
 import { useSimilarityStore } from './similarityStore'
 
+const numberOfPeriods = 76
+
 export const useDatasetStore = defineStore('datasetStore', {
   state: () => {
     return {
@@ -16,13 +18,15 @@ export const useDatasetStore = defineStore('datasetStore', {
     async loadData(): Promise<void> {
       const simData = await d3.csv('./data/sim.csv')
       const thresholdData = await d3.csv('./data/quantiles.csv')
+      const startDates = await d3.csv('./data/start_dates.csv')
+      const endDates = await d3.csv('./data/end_dates.csv')
       const periods: DSVRowArray<string>[] = []
       const looFilesForTopics: d3.DSVRowArray<string>[] = []
       let maxLoo = 0
       const topicSizes = {} as { [topicId: string]: number }
 
       const filenames = []
-      for (let i = 0; i < 79; i++) {
+      for (let i = 0; i < numberOfPeriods; i++) {
         filenames.push('./data/periods/period' + i + '.csv')
       }
       const looFilenames = []
@@ -109,6 +113,7 @@ export const useDatasetStore = defineStore('datasetStore', {
               ? distanceToLastChangePoint + 1
               : maxReferencePeriod
 
+          console.log(startDates[periodIndex].date)
           topic.periods.push({
             id: `${topic.id}-${periodIndex}`,
             topic: topic.id,
@@ -119,6 +124,8 @@ export const useDatasetStore = defineStore('datasetStore', {
             referencePeriodSize: referencePeriodSize,
             words: words,
             loo: looWords,
+            start: startDates[periodIndex].date,
+            end: endDates[periodIndex].date,
           })
         })
       })
@@ -137,7 +144,7 @@ export const useDatasetStore = defineStore('datasetStore', {
   getters: {
     timerange: (state) => [
       state.topics[0].periods[0].start,
-      state.topics[0].periods[-1].end,
+      state.topics[0].periods[state.topics[0].periods.length - 1].end,
     ],
     periodCount: (state) => state.topics[0].periods.length,
     colorScale: (state) =>

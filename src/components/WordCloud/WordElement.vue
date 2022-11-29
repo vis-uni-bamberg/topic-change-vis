@@ -7,13 +7,13 @@
       :text-anchor="'middle'"
       :fill="textColor"
       :opacity="
-        selectedTopic && selectedPeriod
+        selectedTopic && selectedPeriod !== undefined
           ? value(
               selectedTopic,
               selectedTopic?.periods[selectedPeriod ?? 0],
               selectedPeriod ?? 0
             )
-          : selectedPeriod
+          : selectedPeriod !== undefined
           ? valueGlobal(selectedPeriod)
           : 1
       "

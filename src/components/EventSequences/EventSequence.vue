@@ -64,9 +64,11 @@
   import TimeIndicator from './TimeIndicator.vue'
   import { usePeriodStore } from '@/stores/periodStore'
   import { useTopicStore } from '@/stores/topicStore'
+  import { useDatasetStore } from '@/stores/datasetStore'
 
   const periodStore = usePeriodStore()
   const topicStore = useTopicStore()
+  const datasetStore = useDatasetStore()
 
   const props = defineProps<{
     topic: Topic
@@ -102,18 +104,18 @@
     const topicChange = topic.value !== topicStore.selectedTopic
 
     if (topicChange && periodChange) {
-      if (clickedPeriod >= 0 && clickedPeriod < 79) {
+      if (clickedPeriod >= 0 && clickedPeriod < datasetStore.periodCount) {
         periodStore.setSelected(clickedPeriod)
       }
       topicStore.updateSelectedTopic(props.topic)
     } else if (topicChange && !periodChange) {
       topicStore.updateSelectedTopic(props.topic)
     } else if (!topicChange && periodChange) {
-      if (clickedPeriod >= 0 && clickedPeriod < 79) {
+      if (clickedPeriod >= 0 && clickedPeriod < datasetStore.periodCount) {
         periodStore.setSelected(clickedPeriod)
       }
     } else {
-      if (clickedPeriod >= 0 && clickedPeriod < 79) {
+      if (clickedPeriod >= 0 && clickedPeriod < datasetStore.periodCount) {
         periodStore.setSelected(clickedPeriod)
       }
       topicStore.updateSelectedTopic(props.topic)

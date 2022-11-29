@@ -30,14 +30,17 @@
 
   const datasetStore = useDatasetStore()
 
-  const periods = Array.from(Array(79).keys())
+  const periods = Array.from(Array(datasetStore.periodCount).keys())
 
   const props = defineProps<{
     width: number
     word: string
   }>()
 
-  const xScale = d3.scaleLinear().domain([0, 79]).range([0, props.width])
+  const xScale = d3
+    .scaleLinear()
+    .domain([0, datasetStore.periodCount])
+    .range([0, props.width])
 
   const getColor = (word: string, period: number) => {
     const highestTopicForWordForPeriod =
