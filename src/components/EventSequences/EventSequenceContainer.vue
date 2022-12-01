@@ -32,7 +32,7 @@
           @click="(e: MouseEvent) => e.stopPropagation()"
         >
           <span class="when-open">Collapse</span
-          ><span class="when-closed">Inner-Topic Similarity</span>
+          ><span class="when-closed">Intra-Topic Similarity</span>
         </b-button>
       </div>
     </div>
