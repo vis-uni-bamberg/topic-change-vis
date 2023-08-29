@@ -2,6 +2,16 @@ This tool visualizes change points in collections of texts over time. It is an p
 
 **Visually Analyzing Topic Change Points in Temporal Text Collections**. Cedric Krause, Jonas Rieger, Jonathan Flossdorf, Carsten Jentsch, and Fabian Beck. *Vision, Modeling, and Visualization 2023*.
 
-### Vue 3 + Typescript + Vite
 
-The implementation is based on a template for using Vue 3 and Typescript in Vite. Please refer to the respective documentation of these for instructions to compile and run the tool.
+
+### Running the app
+
+**Prerequisites:** npm needs to be installed.
+
+To run the application simply clone the repository and run:
+```
+npm install
+npm run dev
+```
+
+The initial page load can take some time.
