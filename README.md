@@ -4,4 +4,4 @@ This tool visualizes change points in collections of texts over time. It is an p
 
 ### Vue 3 + Typescript + Vite
 
-The implementation is based on a template for using Vue 3 and Typescript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+The implementation is based on a template for using Vue 3 and Typescript in Vite. Please refer to the respective documentation of these for instructions to compile and run the tool.
